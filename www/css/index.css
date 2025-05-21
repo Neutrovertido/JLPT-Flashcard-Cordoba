@@ -149,9 +149,46 @@ body {
 }
 
 .incorrect-card {
-    background-color: #FFCCCB; /* Light red */
-    color: black;
+    background-color: #b71c2b !important; /* Deep red */
+    color: #fff !important;
+    position: relative;
     pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 18px;
+}
+
+.incorrect-card .wrong-x {
+    position: absolute;
+    top: 10px;
+    left: 14px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #fff;
+    pointer-events: none;
+    user-select: none;
+}
+
+.incorrect-card .card-kanji {
+    font-size: 32px;
+    margin-top: 5px;
+    margin-bottom: 2px;
+    font-weight: 500;
+    letter-spacing: 2px;
+}
+
+.incorrect-card .card-kana {
+    font-size: 20px;
+    margin-bottom: 6px;
+    opacity: 0.95;
+}
+
+.incorrect-card .card-english {
+    font-size: 10px;
+    opacity: 0.95;
+    margin-bottom: 4px;
 }
 
 .mode-selector {

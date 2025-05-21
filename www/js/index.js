@@ -129,25 +129,25 @@ document.addEventListener('DOMContentLoaded', () => {
     // Render the grid with options
     function renderGrid() {
         kanjiGrid.innerHTML = '';
-        
+
         displayedOptions.forEach((option, index) => {
             const card = document.createElement('div');
             card.classList.add('card');
             card.dataset.index = index;
-            
-            // Set the card content based on the answer mode
+
+            // Set the card content based on the answer mode (default view)
             if (answerMode === 'kana') {
                 card.textContent = option.Kana;
             } else {
                 card.textContent = option.English;
             }
-            
+
             // Add click event handler
             card.addEventListener('click', handleCardClick);
-            
+
             kanjiGrid.appendChild(card);
         });
-        
+
         // Update the question display
         updateQuestionDisplay();
     }
@@ -208,40 +208,48 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle card click event
     function handleCardClick(event) {
         const selectedIndex = parseInt(event.target.dataset.index);
-        
+
         // Check if the answer is correct
         if (selectedIndex === correctOption) {
             // Correct answer
             event.target.classList.add('correct-card');
             correctCount++;
             correctCountElement.textContent = correctCount;
-            
+
             // Show kanji details
             showKanjiDetails();
         } else {
             // Incorrect answer
+            // Replace card content with custom layout
+            const option = displayedOptions[selectedIndex];
             event.target.classList.add('incorrect-card');
+            event.target.innerHTML = `
+                <span class="wrong-x">✗</span>
+                <div class="card-kanji">${option.Kanji}</div>
+                <div class="card-kana">${option.Kana}</div>
+                <div class="card-english">${option.English}</div>
+            `;
             incorrectCount++;
             incorrectCountElement.textContent = incorrectCount;
-            
+
             // Highlight the correct answer
             const correctCard = kanjiGrid.querySelector(`.card[data-index="${correctOption}"]`);
             if (correctCard) {
                 correctCard.classList.add('correct-card');
             }
         }
-        
+
         // Update remaining count
         remainingCount--;
         remainingCountElement.textContent = remainingCount;
-        
+
         // Disable all cards to prevent multiple selections
         const cards = kanjiGrid.querySelectorAll('.card');
         cards.forEach(card => {
             card.removeEventListener('click', handleCardClick);
             card.style.cursor = 'default';
         });
-        
+
         // Show next button and hide mode selectors
         modeSelector.style.display = 'none';
         questionModeSection.style.display = 'none';
