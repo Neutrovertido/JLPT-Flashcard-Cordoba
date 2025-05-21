@@ -1,0 +1,129 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.menu-button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.score {
+    display: flex;
+    gap: 20px;
+}
+
+.correct, .incorrect {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.correct {
+    color: green;
+}
+
+.incorrect {
+    color: red;
+}
+
+.kanji-display {
+    background-color: #4a7c59;
+    height: 400px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.kanji {
+    font-size: 150px;
+    color: white;
+}
+
+.jlpt-level {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    background-color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.card-number {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    background-color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.answers-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.answer-tile {
+    background-color: white;
+    height: 100px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: transform 0.1s ease-in-out;
+}
+
+.answer-tile:hover {
+    transform: scale(1.02);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.controls {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.toggle-group {
+    display: flex;
+    gap: 5px;
+}
+
+.toggle-button {
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    background-color: white;
+    border: 1px solid #ccc;
+    transition: background-color 0.2s ease;
+}
+
+.toggle-button.active {
+    background-color: #4a7c59;
+    color: white;
+    border-color: #4a7c59;
+}

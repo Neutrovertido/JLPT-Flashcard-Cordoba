@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JLPT N5 Kanji Quiz</title>
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="icon" href="img/icon.png" type="image/png">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="menu-button">☰</button>
+            <div class="score">
+                <div class="correct">✓<span id="correct-count">0</span></div>
+                <div class="incorrect">✗<span id="incorrect-count">0</span></div>
+                <div>Remaining: <span id="remaining-count">80</span></div>
+            </div>
+        </div>
+        
+        <div class="kanji-display">
+            <div class="kanji" id="current-kanji">木</div>
+            <div class="jlpt-level">JLPT N5</div>
+            <div class="card-number"><span id="current-card-number">1</span> of <span id="total-cards">80</span></div>
+        </div>
+        
+        <div class="answers-grid" id="answers-grid">
+            <div class="answer-tile">Father</div>
+            <div class="answer-tile">Rest</div>
+            <div class="answer-tile">Nine</div>
+            <div class="answer-tile">Man</div>
+            <div class="answer-tile">Enter, insert</div>
+            <div class="answer-tile">Above, up</div>
+            <div class="answer-tile">Month, moon</div>
+            <div class="answer-tile">Tree</div>
+            <div class="answer-tile">Woman</div>
+        </div>
+        
+        <div class="controls">
+            <div class="toggle-group" id="question-toggle">
+                <button class="toggle-button active" data-type="kanji">Kanji</button>
+                <button class="toggle-button" data-type="kana">Kana</button>
+                <button class="toggle-button" data-type="english">English</button>
+            </div>
+            
+            <div class="toggle-group" id="answer-toggle">
+                <button class="toggle-button" data-type="kana">Kana</button>
+                <button class="toggle-button active" data-type="english">English</button>
+            </div>
+        </div>
+    </div>
+    <script src="js/index.js" defer></script>
+</body>
+</html>
