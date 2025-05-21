@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let correctCount = 0;
     let incorrectCount = 0;
     let remainingCount = 0;
+    let totalKanjiCount = 0;
     
     // DOM elements
     const kanjiGrid = document.getElementById('kanji-grid');
@@ -54,7 +55,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             const data = await response.json();
             kanjiData = data.MatchCards;
-            remainingCount = kanjiData.length;
+            totalKanjiCount = kanjiData.length;
+            remainingCount = totalKanjiCount;
             remainingCountElement.textContent = remainingCount;
             
             // Start the quiz once data is loaded
@@ -156,9 +158,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateQuestionDisplay() {
         const questionContainer = document.createElement('div');
         questionContainer.classList.add('kanji-display');
-        
+
         let questionText = '';
-        
+
         switch (questionMode) {
             case 'kanji':
                 questionText = currentKanji.Kanji;
@@ -170,36 +172,36 @@ document.addEventListener('DOMContentLoaded', () => {
                 questionText = currentKanji.English;
                 break;
         }
-        
+
         // Create the kanji character element
         const kanjiCharElement = document.createElement('div');
         kanjiCharElement.classList.add('kanji-character');
         kanjiCharElement.textContent = questionText;
         questionContainer.appendChild(kanjiCharElement);
-        
+
         // Create the footer
         const footerElement = document.createElement('div');
         footerElement.classList.add('kanji-footer');
-        
+
         // Create the level indicator
         const levelElement = document.createElement('div');
         levelElement.classList.add('kanji-level');
         levelElement.textContent = 'JLPT N5 Kanji';
         footerElement.appendChild(levelElement);
-        
+
         // Create the counter
         const counterElement = document.createElement('div');
         counterElement.classList.add('kanji-counter');
-        counterElement.textContent = `${103 + 1 - remainingCount} of ${103}`;
+        counterElement.textContent = `${totalKanjiCount + 1 - remainingCount} of ${totalKanjiCount}`;
         footerElement.appendChild(counterElement);
-        
+
         // Add footer to the container
         questionContainer.appendChild(footerElement);
-        
+
         // Clear previous question display
         kanjiQuestionContainer.innerHTML = '';
         kanjiQuestionContainer.appendChild(questionContainer);
-        
+
         // Make sure we don't have other kanji-display elements elsewhere
         const oldDisplays = document.querySelectorAll('.kanji-display:not(:first-child)');
         oldDisplays.forEach(element => element.remove());
