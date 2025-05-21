@@ -184,6 +184,12 @@ document.addEventListener('DOMContentLoaded', () => {
             event.target.classList.add('incorrect-card');
             incorrectCount++;
             incorrectCountElement.textContent = incorrectCount;
+            
+            // Highlight the correct answer
+            const correctCard = kanjiGrid.querySelector(`.card[data-index="${correctOption}"]`);
+            if (correctCard) {
+                correctCard.classList.add('correct-card');
+            }
         }
         
         // Update remaining count

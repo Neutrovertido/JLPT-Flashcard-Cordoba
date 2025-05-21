@@ -132,8 +132,15 @@ body {
 }
 
 .correct-card {
-    background-color: #008000;
-    color: white;
+    background-color: #90EE90; /* Light green */
+    color: black;
+    pointer-events: none;
+}
+
+.incorrect-card {
+    background-color: #FFCCCB; /* Light red */
+    color: black;
+    pointer-events: none;
 }
 
 .mode-selector {
