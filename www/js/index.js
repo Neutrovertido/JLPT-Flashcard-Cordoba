@@ -171,7 +171,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
         }
         
-        questionContainer.textContent = questionText;
+        // Create the kanji character element
+        const kanjiCharElement = document.createElement('div');
+        kanjiCharElement.classList.add('kanji-character');
+        kanjiCharElement.textContent = questionText;
+        questionContainer.appendChild(kanjiCharElement);
+        
+        // Create the footer
+        const footerElement = document.createElement('div');
+        footerElement.classList.add('kanji-footer');
+        
+        // Create the level indicator
+        const levelElement = document.createElement('div');
+        levelElement.classList.add('kanji-level');
+        levelElement.textContent = 'JLPT N5 Kanji';
+        footerElement.appendChild(levelElement);
+        
+        // Create the counter
+        const counterElement = document.createElement('div');
+        counterElement.classList.add('kanji-counter');
+        counterElement.textContent = `${103 + 1 - remainingCount} of ${103}`;
+        footerElement.appendChild(counterElement);
+        
+        // Add footer to the container
+        questionContainer.appendChild(footerElement);
         
         // Clear previous question display
         kanjiQuestionContainer.innerHTML = '';
