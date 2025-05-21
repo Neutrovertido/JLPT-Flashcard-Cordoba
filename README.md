@@ -69,6 +69,36 @@ A web-based flashcard-style quiz for practicing all JLPT N5 kanji, featuring a 9
 - **Styling:** Modify `css/index.css` for appearance tweaks. (it's a bit of a mess right now)
 - **Icons:** Replace `img/icon.png` for a custom favicon.
 
+**JSON Format**:
+```json
+{
+  "JLPTLevel": 5, --> Use 0 for Kana
+  "MatchCards": [
+    {
+      "Examples": [
+        {
+          "KanjiWord": "一つ",
+          "KanaWord": "ひとつ ",
+          "EnglishWord": "One thing",
+          "JLPTLevel": 5
+        },
+        {
+          "KanjiWord": "一人",
+          "KanaWord": "ひとり ",
+          "EnglishWord": "One person, alone",
+          "JLPTLevel": 5
+        }
+      ],
+      "Kanji": "一",
+      "Kana": "イチ",
+      "English": "One",
+      "OnYomi": "イチ, イツ",
+      "KunYomi": "ひと, ひと(つ)"
+    }
+  ]
+}
+```
+
 ## Development
 
 - All logic is in `js/index.js`.
