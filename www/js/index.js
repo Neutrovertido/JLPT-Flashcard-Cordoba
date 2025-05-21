@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let incorrectCount = 0;
     let remainingCount = 0;
     let totalKanjiCount = 0;
+    let jlptLevel = 5; // default, will be overwritten by JSON
     
     // DOM elements
     const kanjiGrid = document.getElementById('kanji-grid');
@@ -56,6 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             kanjiData = data.MatchCards;
             totalKanjiCount = kanjiData.length;
+            jlptLevel = typeof data.JLPTLevel === 'number' ? data.JLPTLevel : 5;
             remainingCount = totalKanjiCount;
             remainingCountElement.textContent = remainingCount;
             
@@ -186,7 +188,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Create the level indicator
         const levelElement = document.createElement('div');
         levelElement.classList.add('kanji-level');
-        levelElement.textContent = 'JLPT N5 Kanji';
+        const levelLabel = jlptLevel === 0
+            ? `JLPT N0 Kana`
+            : `JLPT N${jlptLevel} Kanji`;
+        levelElement.textContent = levelLabel;
         footerElement.appendChild(levelElement);
 
         // Create the counter
