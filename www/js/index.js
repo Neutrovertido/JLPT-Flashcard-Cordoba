@@ -34,6 +34,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const incorrectCountElement = document.getElementById('incorrect-count');
     const remainingCountElement = document.getElementById('remaining-count');
     
+    // DOM elements for next button
+    const modeSelector = document.getElementById('mode-selector');
+    const nextButtonContainer = document.getElementById('next-button-container');
+    const nextQuestionBtn = document.getElementById('next-question-btn');
+    
     // Load Kanji data from JSON file
     async function loadKanjiData() {
         try {
@@ -56,6 +61,10 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Initialize quiz with a new question
     function startQuiz() {
+        // Make sure mode selectors are shown and next button is hidden
+        modeSelector.style.display = 'flex';
+        nextButtonContainer.style.display = 'none';
+        
         // Select a random kanji from the data
         selectRandomKanji();
         
@@ -203,13 +212,28 @@ document.addEventListener('DOMContentLoaded', () => {
             card.style.cursor = 'default';
         });
         
-        // Move to next question after a delay
-        setTimeout(() => {
-            if (document.querySelector('.kanji-display')) {
-                document.querySelector('.kanji-display').remove();
-            }
-            startQuiz();
-        }, 3000);
+        // Show next button and hide mode selectors
+        modeSelector.style.display = 'none';
+        nextButtonContainer.style.display = 'flex';
+    }
+    
+    // Next button click handler
+    nextQuestionBtn.addEventListener('click', goToNextQuestion);
+    
+    function goToNextQuestion() {
+        // Hide next button and show mode selectors
+        nextButtonContainer.style.display = 'none';
+        modeSelector.style.display = 'flex';
+        
+        // Remove kanji display if it exists
+        if (document.querySelector('.kanji-display')) {
+            document.querySelector('.kanji-display').remove();
+        }
+
+        kanjiDetail.style.display = 'none';
+        
+        // Start the next question
+        startQuiz();
     }
     
     // Show kanji details when correct answer is chosen
@@ -247,11 +271,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         kanjiDetail.style.display = 'block';
-        
-        // Hide the details after a delay
-        setTimeout(() => {
-            kanjiDetail.style.display = 'none';
-        }, 3000);
     }
     
     // Show completion message when all kanji have been reviewed

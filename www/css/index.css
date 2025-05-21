@@ -185,3 +185,30 @@ button.active {
     padding: 10px;
     font-size: 20px;
 }
+
+.next-button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.next-button {
+    background-color: #2e6930;
+    color: white;
+    font-size: 18px;
+    padding: 10px 30px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.next-button:hover {
+    background-color: #3c8940;
+    transform: translateY(-2px);
+}
+
+.next-button:active {
+    transform: translateY(0);
+}
