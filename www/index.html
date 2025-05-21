@@ -10,45 +10,57 @@
 <body>
     <div class="container">
         <div class="header">
-            <button class="menu-button">☰</button>
+            <div class="menu-button">
+                <div class="hamburger-icon">≡</div>
+            </div>
             <div class="score">
-                <div class="correct">✓<span id="correct-count">0</span></div>
-                <div class="incorrect">✗<span id="incorrect-count">0</span></div>
-                <div>Remaining: <span id="remaining-count">80</span></div>
+                <span class="correct">✓ <span id="correct-count">0</span></span>
+                <span class="incorrect">✗ <span id="incorrect-count">0</span></span>
+                <span class="remaining">Remaining: <span id="remaining-count">0</span></span>
             </div>
         </div>
-        
-        <div class="kanji-display">
-            <div class="kanji" id="current-kanji">木</div>
-            <div class="jlpt-level">JLPT N5</div>
-            <div class="card-number"><span id="current-card-number">1</span> of <span id="total-cards">80</span></div>
-        </div>
-        
-        <div class="answers-grid" id="answers-grid">
-            <div class="answer-tile">Father</div>
-            <div class="answer-tile">Rest</div>
-            <div class="answer-tile">Nine</div>
-            <div class="answer-tile">Man</div>
-            <div class="answer-tile">Enter, insert</div>
-            <div class="answer-tile">Above, up</div>
-            <div class="answer-tile">Month, moon</div>
-            <div class="answer-tile">Tree</div>
-            <div class="answer-tile">Woman</div>
-        </div>
-        
-        <div class="controls">
-            <div class="toggle-group" id="question-toggle">
-                <button class="toggle-button active" data-type="kanji">Kanji</button>
-                <button class="toggle-button" data-type="kana">Kana</button>
-                <button class="toggle-button" data-type="english">English</button>
+
+        <div class="kanji-detail" id="kanji-detail">
+            <div class="kanji-card">
+                <div class="kanji-character" id="current-kanji"></div>
             </div>
-            
-            <div class="toggle-group" id="answer-toggle">
-                <button class="toggle-button" data-type="kana">Kana</button>
-                <button class="toggle-button active" data-type="english">English</button>
+            <div class="kanji-info">
+                <div class="kanji-info-header">
+                    <div class="english" id="kanji-english"></div>
+                    <div class="kana" id="kanji-kana"></div>
+                </div>
+                <div class="readings">
+                    <div class="kun-yomi">
+                        <span>Kun Yomi</span>
+                        <span id="kun-yomi"></span>
+                    </div>
+                    <div class="on-yomi">
+                        <span>On Yomi</span>
+                        <span id="on-yomi"></span>
+                    </div>
+                </div>
+                <div class="examples" id="examples">
+                    <h3>Examples</h3>
+                    <div class="examples-list" id="examples-list"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="kanji-grid" id="kanji-grid"></div>
+
+        <div class="mode-selector">
+            <div class="question-mode">
+                <button id="kanji-btn" class="active">Kanji</button>
+                <button id="kana-btn">Kana</button>
+                <button id="english-btn">English</button>
+            </div>
+            <div class="answer-mode">
+                <button id="kana-answer-btn" class="active">Kana</button>
+                <button id="english-answer-btn">English</button>
             </div>
         </div>
     </div>
+
     <script src="js/index.js" defer></script>
 </body>
 </html>
