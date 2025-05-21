@@ -203,11 +203,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.querySelector('.kanji-display').remove();
             }
             startQuiz();
-        }, 2000);
+        }, 3000);
     }
     
     // Show kanji details when correct answer is chosen
     function showKanjiDetails() {
+        // Hide the kanji display div
+        const kanjiDisplayElement = document.querySelector('.kanji-display');
+        if (kanjiDisplayElement) {
+            kanjiDisplayElement.style.display = 'none';
+        }
+        
         currentKanjiElement.textContent = currentKanji.Kanji;
         kanjiEnglishElement.textContent = currentKanji.English;
         kanjiKanaElement.textContent = currentKanji.Kana;
