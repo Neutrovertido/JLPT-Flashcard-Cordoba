@@ -54,9 +54,9 @@ body {
 .kanji-detail {
     display: none;
     background-color: #fff;
-    border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0px 5px 6px rgba(0, 0, 0, 0.25);
+    border-radius: 8px;
     font-size: 12px;
     max-height: 30vh;
 }
@@ -122,7 +122,7 @@ body {
 .card {
     background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    box-shadow: 0px 5px 6px rgba(0, 0, 0, 0.25);
     height: 100px;
     display: flex;
     justify-content: center;
@@ -182,13 +182,15 @@ button.active {
 
 .kanji-display {
     background-color: #2e6930;
+    box-shadow: 0px 5px 6px rgba(0, 0, 0, 0.25);
     color: white;
-    font-size: 60px;
+    font-size: 80px;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 40px;
     border-radius: 8px 8px 0 0;
+    height: 20vh;
 }
 
 .kana-display {
@@ -285,8 +287,8 @@ button.active {
     }
     
     .kanji-display {
-        font-size: 80px;
-        border-radius: 8px;
+        font-size: 100px;
+        border-radius: 8px 8px 0 0;
         width: 100%;
         height: 320px;
     }
