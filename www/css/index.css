@@ -122,7 +122,7 @@ body {
 .card {
     background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
     height: 100px;
     display: flex;
     justify-content: center;
@@ -130,6 +130,7 @@ body {
     cursor: pointer;
     transition: transform 0.2s;
     font-size: 18px;
+    text-align: center;
 }
 
 .card.selected {
