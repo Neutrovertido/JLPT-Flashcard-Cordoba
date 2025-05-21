@@ -20,48 +20,59 @@
             </div>
         </div>
 
-        <div class="kanji-detail" id="kanji-detail">
-            <div class="kanji-card">
-                <div class="kanji-character" id="current-kanji"></div>
-            </div>
-            <div class="kanji-info">
-                <div class="kanji-info-header">
-                    <div class="english" id="kanji-english"></div>
-                    <div class="kana" id="kanji-kana"></div>
-                </div>
-                <div class="readings">
-                    <div class="kun-yomi">
-                        <span>Kun Yomi</span>
-                        <span id="kun-yomi"></span>
-                    </div>
-                    <div class="on-yomi">
-                        <span>On Yomi</span>
-                        <span id="on-yomi"></span>
-                    </div>
-                </div>
-                <div class="examples" id="examples">
-                    <h3>Examples</h3>
-                    <div class="examples-list" id="examples-list"></div>
-                </div>
-            </div>
-        </div>
+        <div class="quiz-content">
+            <div class="left-panel">
+                <div id="kanji-question-container"></div>
 
-        <div class="kanji-grid" id="kanji-grid"></div>
-
-        <div class="mode-selector" id="mode-selector">
-            <div class="question-mode">
-                <button id="kanji-btn" class="active">Kanji</button>
-                <button id="kana-btn">Kana</button>
-                <button id="english-btn">English</button>
+                <div class="kanji-detail" id="kanji-detail">
+                    <div class="kanji-card">
+                        <div class="kanji-character" id="current-kanji"></div>
+                    </div>
+                    <div class="kanji-info">
+                        <div class="kanji-info-header">
+                            <div class="english" id="kanji-english"></div>
+                            <div class="kana" id="kanji-kana"></div>
+                        </div>
+                        <div class="readings">
+                            <div class="kun-yomi">
+                                <span>Kun Yomi:</span>
+                                <span id="kun-yomi"></span>
+                            </div>
+                            <div class="on-yomi">
+                                <span>On Yomi:</span>
+                                <span id="on-yomi"></span>
+                            </div>
+                        </div>
+                        <div class="examples" id="examples">
+                            <h3>Examples</h3>
+                            <div class="examples-list" id="examples-list"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question-mode-container">
+                    <div class="question-mode" id="question-mode">
+                        <button id="kanji-btn" class="active">Kanji</button>
+                        <button id="kana-btn">Kana</button>
+                        <button id="english-btn">English</button>
+                    </div>
+                </div>
             </div>
-            <div class="answer-mode">
-                <button id="kana-answer-btn" class="active">Kana</button>
-                <button id="english-answer-btn">English</button>
+            
+            <div class="right-panel">
+                <div class="kanji-grid" id="kanji-grid"></div>
+                
+                <div class="mode-selector" id="mode-selector">
+                    <div class="answer-mode">
+                        <button id="kana-answer-btn">Kana</button>
+                        <button id="english-answer-btn" class="active">English</button>
+                    </div>
+                </div>
+                
+                <div class="next-button-container" id="next-button-container" style="display:none;">
+                    <button id="next-question-btn" class="next-button">Next Question</button>
+                </div>
             </div>
-        </div>
-        
-        <div class="next-button-container" id="next-button-container" style="display:none;">
-            <button id="next-question-btn" class="next-button">Next Question</button>
         </div>
     </div>
 

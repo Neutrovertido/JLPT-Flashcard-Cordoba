@@ -39,6 +39,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const nextButtonContainer = document.getElementById('next-button-container');
     const nextQuestionBtn = document.getElementById('next-question-btn');
     
+    // DOM elements for question container
+    const kanjiQuestionContainer = document.getElementById('kanji-question-container');
+    
+    // Update for the new question mode elements
+    const questionModeSection = document.getElementById('question-mode');
+    
     // Load Kanji data from JSON file
     async function loadKanjiData() {
         try {
@@ -167,12 +173,13 @@ document.addEventListener('DOMContentLoaded', () => {
         
         questionContainer.textContent = questionText;
         
-        // Insert before the grid
-        document.querySelector('.container').insertBefore(questionContainer, kanjiGrid);
+        // Clear previous question display
+        kanjiQuestionContainer.innerHTML = '';
+        kanjiQuestionContainer.appendChild(questionContainer);
         
-        if (document.querySelector('.kanji-display') && document.querySelector('.kanji-display') !== questionContainer) {
-            document.querySelector('.kanji-display').remove();
-        }
+        // Make sure we don't have other kanji-display elements elsewhere
+        const oldDisplays = document.querySelectorAll('.kanji-display:not(:first-child)');
+        oldDisplays.forEach(element => element.remove());
     }
     
     // Handle card click event
@@ -214,6 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Show next button and hide mode selectors
         modeSelector.style.display = 'none';
+        questionModeSection.style.display = 'none';
         nextButtonContainer.style.display = 'flex';
     }
     
@@ -224,6 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Hide next button and show mode selectors
         nextButtonContainer.style.display = 'none';
         modeSelector.style.display = 'flex';
+        questionModeSection.style.display = 'flex';
         
         // Remove kanji display if it exists
         if (document.querySelector('.kanji-display')) {
@@ -231,6 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         kanjiDetail.style.display = 'none';
+        kanjiDetail.parentElement.style.gap = '0';
         
         // Start the next question
         startQuiz();
@@ -262,7 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 exampleElement.classList.add('example-item');
                 
                 exampleElement.innerHTML = `
-                    <span>${example.KanjiWord} (${example.KanaWord})</span>
+                    <span>${example.KanjiWord} ( ${example.KanaWord})</span>
                     <span>${example.EnglishWord}</span>
                 `;
                 
@@ -270,7 +280,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         
-        kanjiDetail.style.display = 'block';
+        kanjiDetail.style.display = 'flex';
+        
     }
     
     // Show completion message when all kanji have been reviewed
@@ -333,6 +344,13 @@ document.addEventListener('DOMContentLoaded', () => {
         englishAnswerBtnElement.classList.toggle('active', answerMode === 'english');
     }
     
-    // Initialize the quiz
-    loadKanjiData();
+    // Initialize the quiz with responsive considerations
+    function initializeQuiz() {
+        // Always display question mode section at startup
+        questionModeSection.style.display = 'flex';
+        loadKanjiData();
+    }
+    
+    // Start the quiz
+    initializeQuiz();
 });

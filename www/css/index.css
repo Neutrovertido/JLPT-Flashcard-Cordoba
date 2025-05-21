@@ -16,6 +16,8 @@ body {
     display: flex;
     flex-direction: column;
     gap: 15px;
+    justify-content: center; /* Vertically center items */
+    min-height: 90vh;       /* Ensure container takes full viewport height */
 }
 
 .header {
@@ -44,12 +46,19 @@ body {
     color: #ff0000;
 }
 
+.left-panel, .right-panel {
+    margin: 30px 10px;
+}
+    
+
 .kanji-detail {
     display: none;
     background-color: #fff;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    font-size: 12px;
+    max-height: 30vh;
 }
 
 .kanji-card {
@@ -58,7 +67,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 40px 0;
+    padding: 0px 20px;
 }
 
 .kanji-character {
@@ -93,14 +102,15 @@ body {
 }
 
 .examples-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    display: grid;
+    grid-template-columns: 2fr 2fr;
+    gap: 8px 25px;
 }
 
 .example-item {
     display: flex;
     justify-content: space-between;
+    gap: 10px;
 }
 
 .kanji-grid {
@@ -176,7 +186,7 @@ button.active {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 40px;
     border-radius: 8px 8px 0 0;
 }
 
@@ -211,4 +221,97 @@ button.active {
 
 .next-button:active {
     transform: translateY(0);
+}
+
+/* Fix for mobile layout */
+.question-mode-container {
+    display: block;  /* Show on all layouts */
+    margin-top: 10px;
+    text-align: center;
+}
+
+#question-mode {
+    width: 100%;
+    justify-content: center;
+}
+
+/* Hide desktop question mode buttons in the mode-selector on all layouts */
+.mode-selector .question-mode {
+    display: none;
+}
+
+/* Responsive design for desktop/wider screens */
+@media (min-width: 768px) {
+    body {
+        padding: 20px;
+    }
+    
+    .container {
+        max-width: 1200px;
+    }
+    
+    .quiz-content {
+        display: flex;
+        flex-direction: row;
+        gap: 20px;
+        align-items: flex-start;
+    }
+    
+    .left-panel {
+        flex: 1;
+        order: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .right-panel {
+        flex: 1;
+        order: 2;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .kanji-detail {
+        width: 100%;
+        font-size: 16px;
+        max-height: 320px;
+        height: 320px;
+    }
+    
+    #kanji-question-container {
+        width: 100%;
+    }
+    
+    .kanji-display {
+        font-size: 80px;
+        border-radius: 8px;
+        width: 100%;
+        height: 320px;
+    }
+
+    .examples-list {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .mode-selector {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .question-mode, .answer-mode {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .question-mode-container {
+        margin-top: 15px;
+    }
+    
+    #question-mode {
+        width: 100%;
+        justify-content: center;
+    }
 }
