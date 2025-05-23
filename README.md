@@ -1,8 +1,8 @@
 # JLPT N5 Kanji Flashcard Quiz 🎌
 
-A web-based flashcard-style quiz for practicing all JLPT N5 kanji, featuring a 9-tile answer grid, detailed kanji info, and flexible question/answer modes. Can be compiled into an `.apk` using Cordova.
+A web-based flashcard-style quiz for practicing all JLPT N5-N1 kanji and kana, featuring a 9-tile answer grid, detailed kanji info, and flexible question/answer modes. Can be compiled into an `.apk` using Cordova.
 
-**Featuring 103 JLPT N5 Kanji!**
+**Featuring all Kana and over 2000 Kanjis!**
 
 **Contributions are welcome!**
 
@@ -15,7 +15,7 @@ A web-based flashcard-style quiz for practicing all JLPT N5 kanji, featuring a 9
 - **Detailed kanji info:** After a correct answer, see readings, meanings, and example words.
 - **Progress tracking:** See your correct/incorrect count and remaining kanji.
 - **Responsive design:** Works well on desktop and mobile. Can be made into a mobile app.
-- **Data-driven:** Loads kanji and example data from `db/N5.json`.
+- **Data-driven:** Loads kanji and example data from `db/` json files.
 
 ## Getting Started
 
@@ -36,7 +36,7 @@ A web-based flashcard-style quiz for practicing all JLPT N5 kanji, featuring a 9
         css/
           index.css
         db/
-          N5.json
+          <json files>
         img/
           icon.png
         js/
@@ -57,6 +57,7 @@ A web-based flashcard-style quiz for practicing all JLPT N5 kanji, featuring a 9
 ### Usage
 
 - Open `index.html` in your browser via your local server.
+- Use the menu to select a deck
 - Use the mode buttons to switch question/answer types.
 - Click an answer tile to select your answer.
 - Review kanji details after correct answers.
@@ -72,7 +73,7 @@ A web-based flashcard-style quiz for practicing all JLPT N5 kanji, featuring a 9
 **JSON Format**:
 ```json
 {
-  "JLPTLevel": 5, --> Use 0 for Kana
+  "JLPTLevel": 5, --> Use 6 or 7 for Kana
   "MatchCards": [
     {
       "Examples": [
@@ -122,4 +123,4 @@ The idea is inspired from http://www.studykanji.net, however, as there is no por
 
 ---
 
-**Created by James for JLPT N5 Kanji learners. 💝**
+**Created by James for Japanese Language learners. 💝**
