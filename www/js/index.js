@@ -188,8 +188,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Create the level indicator
         const levelElement = document.createElement('div');
         levelElement.classList.add('kanji-level');
-        const levelLabel = jlptLevel === 0
-            ? `JLPT N0 Kana`
+        const levelLabel = jlptLevel === 0 || jlptLevel > 5
+            ? `JLPT N5 Kana`
             : `JLPT N${jlptLevel} Kanji`;
         levelElement.textContent = levelLabel;
         footerElement.appendChild(levelElement);
