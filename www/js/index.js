@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Load Kanji data from JSON file
     async function loadKanjiData() {
         try {
-            const response = await fetch('db/N5.json');
+            const response = await fetch('db/data.json');
             if (!response.ok) {
                 throw new Error('Failed to load kanji data');
             }

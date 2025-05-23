@@ -65,7 +65,7 @@ A web-based flashcard-style quiz for practicing all JLPT N5 kanji, featuring a 9
 
 ## Customization
 
-- **Kanji Data:** Edit or expand `db/N5.json` to add or modify kanji and examples.
+- **Kanji Data:** Edit or expand `db/data.json` to add or modify kanji and examples.
 - **Styling:** Modify `css/index.css` for appearance tweaks. (it's a bit of a mess right now)
 - **Icons:** Replace `img/icon.png` for a custom favicon.
 
