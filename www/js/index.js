@@ -145,29 +145,47 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loadKanjiData() {
         try {
             let quizSet = getQuizSetFile();
+            let data, isKanaFile = false;
+
             if (typeof quizSet === 'object') {
-                // Custom JSON object
-                const data = quizSet;
+                data = quizSet;
+            } else {
+                const response = await fetch(quizSet);
+                if (!response.ok) {
+                    throw new Error('Failed to load kanji data');
+                }
+                data = await response.json();
+            }
+
+            // Detect kana file by JLPTLevel or filename
+            const stored = localStorage.getItem('jlpt_quizset');
+            if (
+                (stored === 'hiragana' || stored === 'katakana') ||
+                (typeof data.JLPTLevel === 'number' && data.JLPTLevel === 7)
+            ) {
+                isKanaFile = true;
+            }
+
+            // Parse and normalize for kana files
+            if (isKanaFile) {
+                kanjiData = data.MatchCards.map(card => ({
+                    ...card,
+                    Kanji: card.Kana.trim(), // Use Kana as the main display
+                    Kana: card.Kana.trim(),
+                    English: card.English.trim(),
+                    OnYomi: "",
+                    KunYomi: "",
+                    Examples: []
+                }));
+                jlptLevel = 0;
+            } else {
                 kanjiData = data.MatchCards;
-                totalKanjiCount = kanjiData.length;
                 jlptLevel = typeof data.JLPTLevel === 'number' ? data.JLPTLevel : 5;
-                remainingCount = totalKanjiCount;
-                remainingCountElement.textContent = remainingCount;
-                startQuiz();
-                return;
             }
-            const response = await fetch(quizSet);
-            if (!response.ok) {
-                throw new Error('Failed to load kanji data');
-            }
-            const data = await response.json();
-            kanjiData = data.MatchCards;
+
             totalKanjiCount = kanjiData.length;
-            jlptLevel = typeof data.JLPTLevel === 'number' ? data.JLPTLevel : 5;
             remainingCount = totalKanjiCount;
             remainingCountElement.textContent = remainingCount;
-            
-            // Start the quiz once data is loaded
             startQuiz();
         } catch (error) {
             console.error('Error loading kanji data:', error);
