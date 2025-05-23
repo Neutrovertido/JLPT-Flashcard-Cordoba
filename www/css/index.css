@@ -386,3 +386,73 @@ button.active {
         justify-content: center;
     }
 }
+
+.popup-menu-overlay {
+    position: fixed;
+    z-index: 1000;
+    left: 0; top: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.popup-menu {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    padding: 28px 32px 20px 32px;
+    min-width: 320px;
+    max-width: 95vw;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.popup-menu h3 {
+    margin: 0 0 10px 0;
+    font-size: 20px;
+    text-align: center;
+}
+
+.popup-menu-columns {
+    display: flex;
+    flex-direction: row;
+    gap: 32px;
+    justify-content: center;
+}
+
+.popup-menu-col {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.popup-menu label {
+    font-size: 16px;
+    display: block;
+    cursor: pointer;
+}
+
+.popup-menu-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.popup-menu-actions button {
+    padding: 6px 18px;
+    border-radius: 20px;
+    border: 1px solid #2e6930;
+    background: #2e6930;
+    color: #fff;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.popup-menu-actions button:hover {
+    background: #3c8940;
+}

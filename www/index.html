@@ -10,13 +10,41 @@
 <body>
     <div class="container">
         <div class="header">
-            <div class="menu-button">
+            <div class="menu-button" id="menu-button">
                 <div class="hamburger-icon">≡</div>
             </div>
             <div class="score">
                 <span class="correct">✓ <span id="correct-count">0</span></span>
                 <span class="incorrect">✗ <span id="incorrect-count">0</span></span>
                 <span class="remaining">Remaining: <span id="remaining-count">0</span></span>
+            </div>
+        </div>
+
+        <!-- Popup Menu -->
+        <div class="popup-menu-overlay" id="popup-menu-overlay" style="display:none;">
+            <div class="popup-menu">
+                <h3>Select Quiz Set</h3>
+                <form id="quiz-set-form">
+                    <div class="popup-menu-columns">
+                        <div class="popup-menu-col">
+                            <label><input type="radio" name="quizset" value="hiragana"> Hiragana</label>
+                            <label><input type="radio" name="quizset" value="katakana"> Katakana</label>
+                            <label><input type="radio" name="quizset" value="custom"> Custom</label>
+                        </div>
+                        <div class="popup-menu-col">
+                            <label><input type="radio" name="quizset" value="n5" checked> N5 Kanji</label>
+                            <label><input type="radio" name="quizset" value="n4"> N4 Kanji</label>
+                            <label><input type="radio" name="quizset" value="n3"> N3 Kanji</label>
+                            <label><input type="radio" name="quizset" value="n2"> N2 Kanji</label>
+                            <label><input type="radio" name="quizset" value="n1"> N1 Kanji</label>
+                        </div>
+                    </div>
+                </form>
+                <div class="popup-menu-actions">
+                    <button id="popup-ok-btn" type="button">OK</button>
+                    <button id="popup-cancel-btn" type="button">Cancel</button>
+                </div>
+                <input type="file" id="custom-json-input" accept=".json" style="display:none;">
             </div>
         </div>
 

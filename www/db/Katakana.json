@@ -1,0 +1,573 @@
+{
+    "JLPTLevel": 6,
+    "MatchCards": [
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ア",
+            "English": "a",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "イ",
+            "English": "i",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ウ",
+            "English": "u",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "エ",
+            "English": "e",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "オ",
+            "English": "o",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "カ",
+            "English": "ka",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "キ",
+            "English": "ki",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ク",
+            "English": "ku",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ケ",
+            "English": "ke",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "コ",
+            "English": "ko",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "シ",
+            "English": "shi",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ス",
+            "English": "su",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "セ",
+            "English": "se",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ソ",
+            "English": "so",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "タ",
+            "English": "ta",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "チ",
+            "English": "chi",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ツ",
+            "English": "tsu",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "テ",
+            "English": "te",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ト",
+            "English": "to",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ナ",
+            "English": "na",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ニ",
+            "English": "ni",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ヌ",
+            "English": "nu",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ネ",
+            "English": "ne",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ノ",
+            "English": "no",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ハ",
+            "English": "ha",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ヒ",
+            "English": "hi",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "フ",
+            "English": "fu",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ヘ",
+            "English": "he",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ホ",
+            "English": "ho",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "マ",
+            "English": "ma",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ミ",
+            "English": "mi",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ム",
+            "English": "mu",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "メ",
+            "English": "me",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "モ",
+            "English": "mo",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ヤ",
+            "English": "ya",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ユ",
+            "English": "yu",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ヨ",
+            "English": "yo",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ラ",
+            "English": "ra",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "リ",
+            "English": "ri",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ル",
+            "English": "ru",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "レ",
+            "English": "re",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ロ",
+            "English": "ro",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ワ",
+            "English": "wa",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ヲ",
+            "English": "wo",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ン ",
+            "English": "n",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ガ",
+            "English": "ga",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ギ",
+            "English": "gi",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "グ",
+            "English": "gu",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ゲ",
+            "English": "ge",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ゴ",
+            "English": "go",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ザ",
+            "English": "za",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ジ",
+            "English": "ji",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ズ",
+            "English": "zu",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ゼ",
+            "English": "ze",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ゾ",
+            "English": "zo",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ダ",
+            "English": "da",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ヂ",
+            "English": "ji",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ヅ",
+            "English": "zu",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "デ",
+            "English": "de",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ド",
+            "English": "do",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ニョ",
+            "English": "nyo",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "バ",
+            "English": "ba",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "パ",
+            "English": "pa",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ビ",
+            "English": "bi",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ピ",
+            "English": "pi",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ブ",
+            "English": "bu",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "プ",
+            "English": "pu",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ベ",
+            "English": "be",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ペ",
+            "English": "pe",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ボ",
+            "English": "bo",
+            "OnYomi": " ",
+            "KunYomi": " "
+        },
+        {
+            "Examples": [],
+            "Kanji": " ",
+            "Kana": "ポ",
+            "English": "po",
+            "OnYomi": " ",
+            "KunYomi": " "
+        }
+    ]
+}

@@ -47,25 +47,160 @@ document.addEventListener('DOMContentLoaded', () => {
     // Update for the new question mode elements
     const questionModeSection = document.getElementById('question-mode');
     
-    // Load Kanji data from JSON file
-    async function loadKanjiData() {
-        try {
-            const response = await fetch('db/data.json');
-            if (!response.ok) {
-                throw new Error('Failed to load kanji data');
+    // Popup menu logic
+    const menuButton = document.getElementById('menu-button');
+    const popupMenuOverlay = document.getElementById('popup-menu-overlay');
+    const popupOkBtn = document.getElementById('popup-ok-btn');
+    const popupCancelBtn = document.getElementById('popup-cancel-btn');
+    const quizSetForm = document.getElementById('quiz-set-form');
+    const customJsonInput = document.getElementById('custom-json-input');
+
+    // Track which file to load
+    let quizSetFile = null;
+    let customJsonData = null;
+
+    // Show popup menu on menu button click
+    menuButton.addEventListener('click', () => {
+        popupMenuOverlay.style.display = 'flex';
+    });
+
+    // Hide popup menu on cancel
+    popupCancelBtn.addEventListener('click', () => {
+        popupMenuOverlay.style.display = 'none';
+    });
+
+    // OK button: handle quiz set selection
+    popupOkBtn.addEventListener('click', () => {
+        const selected = quizSetForm.quizset.value;
+        if (selected === 'custom') {
+            // Show file picker
+            customJsonInput.value = '';
+            customJsonInput.click();
+        } else {
+            // Save selection to localStorage
+            localStorage.setItem('jlpt_quizset', selected);
+            // Map selection to file
+            let file = '';
+            switch (selected) {
+                case 'hiragana': file = 'db/hiragana.json'; break;
+                case 'katakana': file = 'db/katakana.json'; break;
+                case 'n5': file = 'db/N5.json'; break;
+                case 'n4': file = 'db/N4.json'; break;
+                case 'n3': file = 'db/N3.json'; break;
+                case 'n2': file = 'db/N2.json'; break;
+                case 'n1': file = 'db/N1.json'; break;
+                default: file = 'db/N5.json';
             }
-            const data = await response.json();
-            kanjiData = data.MatchCards;
+            localStorage.removeItem('jlpt_custom_json');
+            window.location.reload();
+        }
+        popupMenuOverlay.style.display = 'none';
+    });
+
+    // Handle custom file selection
+    customJsonInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+            try {
+                const json = JSON.parse(evt.target.result);
+                localStorage.setItem('jlpt_quizset', 'custom');
+                localStorage.setItem('jlpt_custom_json', evt.target.result);
+                window.location.reload();
+            } catch (err) {
+                alert('Invalid JSON file.');
+            }
+        };
+        reader.readAsText(file);
+    });
+
+    // Determine which file to load on startup
+    function getQuizSetFile() {
+        const stored = localStorage.getItem('jlpt_quizset');
+        if (stored === 'custom') {
+            const custom = localStorage.getItem('jlpt_custom_json');
+            if (custom) {
+                try {
+                    return JSON.parse(custom);
+                } catch {
+                    // fallback to N5
+                }
+            }
+        } else if (stored) {
+            switch (stored) {
+                case 'hiragana': return 'db/hiragana.json';
+                case 'katakana': return 'db/katakana.json';
+                case 'n5': return 'db/N5.json';
+                case 'n4': return 'db/N4.json';
+                case 'n3': return 'db/N3.json';
+                case 'n2': return 'db/N2.json';
+                case 'n1': return 'db/N1.json';
+            }
+        }
+        return 'db/N5.json';
+    }
+
+    // Load Kanji data from JSON file or custom JSON
+    async function loadKanjiData() {
+        // Helper to add timeout to a promise
+        function withTimeout(promise, ms) {
+            return Promise.race([
+                promise,
+                new Promise((_, reject) =>
+                    setTimeout(() => reject(new Error('Loading kanji data timed out after 5 seconds')), ms)
+                )
+            ]);
+        }
+
+        try {
+            let quizSet = getQuizSetFile();
+            let data, isKanaFile = false;
+
+            if (typeof quizSet === 'object') {
+                data = quizSet;
+            } else {
+                // Add 5 second timeout to fetch
+                const response = await withTimeout(fetch(quizSet), 5000);
+                if (!response.ok) {
+                    throw new Error('Failed to load kanji data');
+                }
+                data = await withTimeout(response.json(), 5000);
+            }
+
+            // Detect kana file by JLPTLevel or filename
+            const stored = localStorage.getItem('jlpt_quizset');
+            if (
+                (stored === 'hiragana' || stored === 'katakana') ||
+                (typeof data.JLPTLevel === 'number' && (data.JLPTLevel === 7 || data.JLPTLevel === 6))
+            ) {
+                isKanaFile = true;
+            }
+
+            // Parse and normalize for kana files
+            if (isKanaFile) {
+                kanjiData = data.MatchCards.map(card => ({
+                    ...card,
+                    Kanji: card.Kana.trim(), // Use Kana as the main display
+                    Kana: card.Kana.trim(),
+                    English: card.English.trim(),
+                    OnYomi: "",
+                    KunYomi: "",
+                    Examples: []
+                }));
+                jlptLevel = 0;
+            } else {
+                kanjiData = data.MatchCards;
+                jlptLevel = typeof data.JLPTLevel === 'number' ? data.JLPTLevel : 5;
+            }
+
             totalKanjiCount = kanjiData.length;
-            jlptLevel = typeof data.JLPTLevel === 'number' ? data.JLPTLevel : 5;
             remainingCount = totalKanjiCount;
             remainingCountElement.textContent = remainingCount;
-            
-            // Start the quiz once data is loaded
             startQuiz();
         } catch (error) {
             console.error('Error loading kanji data:', error);
-            kanjiGrid.innerHTML = '<div class="error">Failed to load kanji data. Please check your connection and try again.</div>';
+            kanjiGrid.innerHTML = '<div class="error">Failed to load kanji data. Please check your file and try again.</div>';
         }
     }
     
