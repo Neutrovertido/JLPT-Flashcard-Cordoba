@@ -129,8 +129,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } else if (stored) {
             switch (stored) {
-                case 'hiragana': return 'db/hiragana.json';
-                case 'katakana': return 'db/katakana.json';
+                case 'hiragana': return 'db/Hiragana.json';
+                case 'katakana': return 'db/Katakana.json';
                 case 'n5': return 'db/N5.json';
                 case 'n4': return 'db/N4.json';
                 case 'n3': return 'db/N3.json';
