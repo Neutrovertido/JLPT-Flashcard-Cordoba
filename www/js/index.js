@@ -143,6 +143,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Load Kanji data from JSON file or custom JSON
     async function loadKanjiData() {
+        // Helper to add timeout to a promise
+        function withTimeout(promise, ms) {
+            return Promise.race([
+                promise,
+                new Promise((_, reject) =>
+                    setTimeout(() => reject(new Error('Loading kanji data timed out after 5 seconds')), ms)
+                )
+            ]);
+        }
+
         try {
             let quizSet = getQuizSetFile();
             let data, isKanaFile = false;
@@ -150,18 +160,19 @@ document.addEventListener('DOMContentLoaded', () => {
             if (typeof quizSet === 'object') {
                 data = quizSet;
             } else {
-                const response = await fetch(quizSet);
+                // Add 5 second timeout to fetch
+                const response = await withTimeout(fetch(quizSet), 5000);
                 if (!response.ok) {
                     throw new Error('Failed to load kanji data');
                 }
-                data = await response.json();
+                data = await withTimeout(response.json(), 5000);
             }
 
             // Detect kana file by JLPTLevel or filename
             const stored = localStorage.getItem('jlpt_quizset');
             if (
                 (stored === 'hiragana' || stored === 'katakana') ||
-                (typeof data.JLPTLevel === 'number' && data.JLPTLevel === 7)
+                (typeof data.JLPTLevel === 'number' && (data.JLPTLevel === 7 || data.JLPTLevel === 6))
             ) {
                 isKanaFile = true;
             }
@@ -189,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
             startQuiz();
         } catch (error) {
             console.error('Error loading kanji data:', error);
-            kanjiGrid.innerHTML = '<div class="error">Failed to load kanji data. Please check your connection and try again.</div>';
+            kanjiGrid.innerHTML = '<div class="error">Failed to load kanji data. Please check your file and try again.</div>';
         }
     }
     
