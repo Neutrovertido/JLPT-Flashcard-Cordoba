@@ -67,13 +67,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function getDeckSizeForQuizset(quizset) {
         // These numbers should match your actual deck sizes
         const sizes = {
-            hiragana: 46,
-            katakana: 46,
+            hiragana: 72,
+            katakana: 71,
             n5: 103,
-            n4: 167,
-            n3: 369,
-            n2: 367,
-            n1: 1006
+            n4: 181,
+            n3: 420,
+            n2: 319,
+            n1: 1011
         };
         return sizes[quizset] || 1;
     }
