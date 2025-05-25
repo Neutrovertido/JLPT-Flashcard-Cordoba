@@ -159,9 +159,12 @@ document.addEventListener('DOMContentLoaded', () => {
         rangeEndInput.value = end;
     }
 
-    // Clamp on input
-    rangeStartInput.addEventListener('input', clampRangeInputs);
-    rangeEndInput.addEventListener('input', clampRangeInputs);
+    // rangeStartInput.addEventListener('input', clampRangeInputs);
+    // rangeEndInput.addEventListener('input', clampRangeInputs);
+
+    // Only clamp on blur (losing focus) or when clicking OK
+    rangeStartInput.addEventListener('blur', clampRangeInputs);
+    rangeEndInput.addEventListener('blur', clampRangeInputs);
 
     // OK button: handle quiz set selection
     popupOkBtn.addEventListener('click', () => {
@@ -173,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
             customJsonInput.value = '';
             customJsonInput.click();
         } else {
-            clampRangeInputs();
+            clampRangeInputs(); // Clamp when clicking OK
             // Save selection and range to localStorage
             localStorage.setItem('jlpt_quizset', selected);
             localStorage.setItem('jlpt_quizset_range', JSON.stringify({
@@ -188,6 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Hide popup menu on cancel
     popupCancelBtn.addEventListener('click', () => {
+        clampRangeInputs(); // Clamp when clicking Cancel (to restore valid state)
         popupMenuOverlay.style.display = 'none';
     });
 
