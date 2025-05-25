@@ -327,13 +327,19 @@ document.addEventListener('DOMContentLoaded', () => {
         // Make sure mode selectors are shown and next button is hidden
         modeSelector.style.display = 'flex';
         nextButtonContainer.style.display = 'none';
-        
+
+        // If there are no more kanji left, show completion message
+        if (kanjiData.length === 0) {
+            showCompletionMessage();
+            return;
+        }
+
         // Select a random kanji from the data
         selectRandomKanji();
-        
+
         // Generate options for the quiz (1 correct, 8 wrong)
         generateOptions();
-        
+
         // Display the options in the grid
         renderGrid();
     }
@@ -341,13 +347,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Select a random kanji from the data
     function selectRandomKanji() {
         if (kanjiData.length === 0) {
-            showCompletionMessage();
             return;
         }
-        
+
         const randomIndex = Math.floor(Math.random() * kanjiData.length);
         currentKanji = kanjiData[randomIndex];
-        
+
         // Remove selected kanji from the data to avoid repetition
         kanjiData.splice(randomIndex, 1);
     }
@@ -584,16 +589,42 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Show completion message when all kanji have been reviewed
     function showCompletionMessage() {
+        // Hide kanji detail and question display if visible
+        kanjiDetail.style.display = 'none';
+        if (document.querySelector('.kanji-display')) {
+            document.querySelector('.kanji-display').remove();
+        }
+        // Hide mode selectors and next button
+        modeSelector.style.display = 'none';
+        nextButtonContainer.style.display = 'none';
+        questionModeSection.style.display = 'none';
+
+        // Determine deck label for message
+        let deckLabel = '';
+        let storedQuizset = localStorage.getItem('jlpt_quizset') || 'n5';
+        switch (storedQuizset) {
+            case 'hiragana': deckLabel = 'Hiragana'; break;
+            case 'katakana': deckLabel = 'Katakana'; break;
+            case 'n5': deckLabel = 'JLPT N5 Kanji'; break;
+            case 'n4': deckLabel = 'JLPT N4 Kanji'; break;
+            case 'n3': deckLabel = 'JLPT N3 Kanji'; break;
+            case 'n2': deckLabel = 'JLPT N2 Kanji'; break;
+            case 'n1': deckLabel = 'JLPT N1 Kanji'; break;
+            case 'custom': deckLabel = 'Custom Deck'; break;
+            default: deckLabel = 'Kanji';
+        }
+
         kanjiGrid.innerHTML = `
             <div class="completion-message">
                 <h2>Congratulations!</h2>
-                <p>You have completed all JLPT N5 kanji.</p>
+                <p>You have completed all your ${deckLabel}.</p>
                 <p>Score: ${correctCount}/${correctCount + incorrectCount}</p>
                 <button id="restart-btn">Restart Quiz</button>
             </div>
         `;
-        
+
         document.getElementById('restart-btn').addEventListener('click', () => {
+            // Reset progress and reload deck/range
             window.location.reload();
         });
     }
