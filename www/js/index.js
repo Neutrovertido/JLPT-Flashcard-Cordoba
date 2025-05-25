@@ -98,7 +98,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // On menu open, restore previous selection and range
     menuButton.addEventListener('click', () => {
         // Restore selection
-        const storedQuizset = localStorage.getItem('jlpt_quizset') || 'n5';
+        let storedQuizset = localStorage.getItem('jlpt_quizset');
+        if (!storedQuizset) storedQuizset = 'n5';
         const radios = quizSetForm.elements['quizset'];
         for (let radio of radios) {
             radio.checked = (radio.value === storedQuizset);
@@ -114,6 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 rangeEndInput.value = end;
             } catch {}
         } else {
+            // Default to n5 full range if nothing in storage
             rangeStartInput.value = 1;
             rangeEndInput.value = getDeckSizeForQuizset(storedQuizset);
         }
@@ -194,7 +196,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Determine which file to load on startup
     function getQuizSetFile() {
-        const stored = localStorage.getItem('jlpt_quizset');
+        let stored = localStorage.getItem('jlpt_quizset');
+        if (!stored) {
+            // Default to n5 and its range if nothing in storage
+            localStorage.setItem('jlpt_quizset', 'n5');
+            localStorage.setItem('jlpt_quizset_range', JSON.stringify({
+                start: 1,
+                end: getDeckSizeForQuizset('n5')
+            }));
+            stored = 'n5';
+        }
         if (stored === 'custom') {
             const custom = localStorage.getItem('jlpt_custom_json');
             if (custom) {
