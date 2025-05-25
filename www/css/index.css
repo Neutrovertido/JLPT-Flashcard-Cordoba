@@ -336,12 +336,22 @@ button.active {
         flex-direction: column;
         gap: 15px;
     }
+
+    .kanji-grid {
+        gap: 10px;
+    }
+
+    .card {
+        height: 125px;
+        padding: 5px;
+        font-size: 20px;
+    }
     
     .kanji-detail {
         width: 100%;
         font-size: 16px;
-        max-height: 320px;
-        height: 320px;
+        max-height: 400px;
+        height: 400px;
     }
     
     #kanji-question-container {
@@ -353,7 +363,7 @@ button.active {
         font-size: 100px;
         border-radius: 8px;
         width: 100%;
-        height: 320px;
+        height: 400px;
     }
     
     .kanji-display .kanji-footer {
@@ -455,4 +465,123 @@ button.active {
 
 .popup-menu-actions button:hover {
     background: #3c8940;
+}
+
+.popup-range-row {
+    margin-top: 18px;
+    font-size: 15px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.popup-range-row label {
+    font-weight: 500;
+}
+.popup-range-row input[type="number"] {
+    margin: 0 2px;
+    padding: 2px 4px;
+    font-size: 15px;
+    border-radius: 6px;
+    border: 1px solid #bbb;
+    text-align: center;
+}
+#range-max-label {
+    margin-left: 6px;
+    color: #888;
+    font-size: 13px;
+}
+
+.completion-message {
+    background: #f8fff4;
+    border-radius: 14px;
+    box-shadow: 0 4px 24px rgba(46, 105, 48, 0.10), 0 1.5px 6px rgba(46, 105, 48, 0.08);
+    border: 2px solid #2e6930;
+    padding: 36px 28px 28px 28px;
+    margin: 30px auto 0 auto;
+    max-width: 400px;
+    text-align: center;
+    color: #2e6930;
+    animation: pop-in 0.4s cubic-bezier(.5,1.8,.5,1) 1;
+}
+
+@keyframes pop-in {
+    0% { transform: scale(0.9); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.completion-message h2 {
+    font-size: 2.2em;
+    margin-bottom: 12px;
+    color: #2e6930;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.completion-message p {
+    font-size: 1.15em;
+    margin: 10px 0;
+    color: #2e6930;
+}
+
+.completion-message button#restart-btn {
+    margin-top: 18px;
+    background: #2e6930;
+    color: #fff;
+    border: none;
+    border-radius: 22px;
+    font-size: 1.1em;
+    padding: 10px 36px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(46, 105, 48, 0.08);
+    transition: background 0.2s, transform 0.1s;
+}
+
+.completion-message button#restart-btn:hover {
+    background: #3c8940;
+    transform: translateY(-2px) scale(1.04);
+}
+
+.completion-message button#restart-btn:active {
+    background: #225021;
+    transform: scale(0.98);
+}
+
+/* Import Noto Sans for UI */
+@font-face {
+    font-family: 'Noto Sans';
+    src: url('../fonts/NotoSans-VariableFont_wdth,wght.ttf') format('truetype');
+    font-weight: 100 900;
+    font-stretch: 75% 100%;
+    font-display: swap;
+}
+
+/* Import Noto Sans JP for Japanese */
+@font-face {
+    font-family: 'Noto Sans JP';
+    src: url('../fonts/NotoSansJP-VariableFont_wght.ttf') format('truetype');
+    font-weight: 100 900;
+    font-display: swap;
+}
+
+/* Use Noto Sans for all UI by default */
+body, button, input, select, textarea, .popup-menu, .completion-message, .score, .kanji-info, .kanji-info-header, .examples-list, .mode-selector, .question-mode, .answer-mode {
+    font-family: 'Noto Sans', Arial, sans-serif;
+}
+
+/* Use Noto Sans JP for Japanese text (kanji/kana) */
+.kanji-character,
+.card-kanji,
+.card-kana,
+#kanji-kana,
+#current-kanji,
+#kun-yomi,
+#on-yomi,
+.kanji-detail,
+.kanji-card,
+.examples-list,
+.example-item span:first-child {
+    font-family: 'Noto Sans JP', 'Noto Sans', Arial, sans-serif;
+    font-feature-settings: "palt";
+    font-weight: 500;
 }
