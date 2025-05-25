@@ -312,6 +312,10 @@ document.addEventListener('DOMContentLoaded', () => {
             let startIdx = Math.max(1, Math.min(range.start, totalKanjiCount));
             let endIdx = Math.max(1, Math.min(range.end, totalKanjiCount));
             if (startIdx > endIdx) startIdx = endIdx;
+            // Ensure a minimum range size of 10 cards
+            if ((endIdx - startIdx + 1) < 10) {
+                endIdx = Math.min(startIdx + 9, totalKanjiCount);
+            }
             // Slice deck to selected range (1-based to 0-based)
             kanjiData = kanjiData.slice(startIdx - 1, endIdx);
             // Set distractor pool to the full selected range (not mutated during quiz)
