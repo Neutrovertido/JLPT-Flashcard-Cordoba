@@ -481,3 +481,58 @@ button.active {
     color: #888;
     font-size: 13px;
 }
+
+.completion-message {
+    background: #f8fff4;
+    border-radius: 14px;
+    box-shadow: 0 4px 24px rgba(46, 105, 48, 0.10), 0 1.5px 6px rgba(46, 105, 48, 0.08);
+    border: 2px solid #2e6930;
+    padding: 36px 28px 28px 28px;
+    margin: 30px auto 0 auto;
+    max-width: 400px;
+    text-align: center;
+    color: #2e6930;
+    animation: pop-in 0.4s cubic-bezier(.5,1.8,.5,1) 1;
+}
+
+@keyframes pop-in {
+    0% { transform: scale(0.9); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.completion-message h2 {
+    font-size: 2.2em;
+    margin-bottom: 12px;
+    color: #2e6930;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.completion-message p {
+    font-size: 1.15em;
+    margin: 10px 0;
+    color: #2e6930;
+}
+
+.completion-message button#restart-btn {
+    margin-top: 18px;
+    background: #2e6930;
+    color: #fff;
+    border: none;
+    border-radius: 22px;
+    font-size: 1.1em;
+    padding: 10px 36px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(46, 105, 48, 0.08);
+    transition: background 0.2s, transform 0.1s;
+}
+
+.completion-message button#restart-btn:hover {
+    background: #3c8940;
+    transform: translateY(-2px) scale(1.04);
+}
+
+.completion-message button#restart-btn:active {
+    background: #225021;
+    transform: scale(0.98);
+}
