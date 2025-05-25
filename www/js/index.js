@@ -63,6 +63,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let customJsonData = null;
     let deckMax = 1; // will be set dynamically
 
+    // Store the full pool for distractors (within selected range)
+    let distractorPool = [];
+
     // Helper: get deck size for a quizset (sync, for menu)
     function getDeckSizeForQuizset(quizset) {
         // These numbers should match your actual deck sizes
@@ -295,6 +298,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (startIdx > endIdx) startIdx = endIdx;
             // Slice deck to selected range (1-based to 0-based)
             kanjiData = kanjiData.slice(startIdx - 1, endIdx);
+            // Set distractor pool to the full selected range (not mutated during quiz)
+            distractorPool = kanjiData.slice();
             totalKanjiCount = kanjiData.length;
             remainingCount = totalKanjiCount;
             remainingCountElement.textContent = remainingCount;
@@ -338,23 +343,30 @@ document.addEventListener('DOMContentLoaded', () => {
     // Generate 9 options (1 correct, 8 distractors)
     function generateOptions() {
         displayedOptions = [currentKanji];
-        
-        // Choose 8 different kanji for wrong options
-        while (displayedOptions.length < 9) {
-            const randomIndex = Math.floor(Math.random() * kanjiData.length);
-            const option = kanjiData[randomIndex];
-            
-            // Check if this option is already in displayedOptions
-            if (!displayedOptions.some(item => item.Kanji === option.Kanji)) {
-                displayedOptions.push(option);
-            }
+
+        // Use distractors from the full pool, excluding the currentKanji
+        let availableDistractors = distractorPool.filter(item => item.Kanji !== currentKanji.Kanji);
+
+        // If not enough distractors, use as many as possible
+        while (displayedOptions.length < 9 && availableDistractors.length > 0) {
+            const randomIndex = Math.floor(Math.random() * availableDistractors.length);
+            const option = availableDistractors.splice(randomIndex, 1)[0];
+            displayedOptions.push(option);
         }
-        
+
+        // If still not enough (e.g. deck < 9), fill with dummies
+        while (displayedOptions.length < 9) {
+            displayedOptions.push({
+                ...currentKanji,
+                isDummy: true
+            });
+        }
+
         // Shuffle the options
         shuffleArray(displayedOptions);
-        
+
         // Find the index of the correct option after shuffling
-        correctOption = displayedOptions.findIndex(option => option.Kanji === currentKanji.Kanji);
+        correctOption = displayedOptions.findIndex(option => option.Kanji === currentKanji.Kanji && !option.isDummy);
     }
     
     // Shuffle array in place (Fisher-Yates algorithm)
