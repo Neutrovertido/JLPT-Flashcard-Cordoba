@@ -456,3 +456,28 @@ button.active {
 .popup-menu-actions button:hover {
     background: #3c8940;
 }
+
+.popup-range-row {
+    margin-top: 18px;
+    font-size: 15px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.popup-range-row label {
+    font-weight: 500;
+}
+.popup-range-row input[type="number"] {
+    margin: 0 2px;
+    padding: 2px 4px;
+    font-size: 15px;
+    border-radius: 6px;
+    border: 1px solid #bbb;
+    text-align: center;
+}
+#range-max-label {
+    margin-left: 6px;
+    color: #888;
+    font-size: 13px;
+}

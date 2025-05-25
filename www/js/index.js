@@ -54,46 +54,123 @@ document.addEventListener('DOMContentLoaded', () => {
     const popupCancelBtn = document.getElementById('popup-cancel-btn');
     const quizSetForm = document.getElementById('quiz-set-form');
     const customJsonInput = document.getElementById('custom-json-input');
+    const rangeRow = document.getElementById('popup-range-row');
+    const rangeStartInput = document.getElementById('range-start');
+    const rangeEndInput = document.getElementById('range-end');
+    const rangeMaxLabel = document.getElementById('range-max-label');
 
-    // Track which file to load
     let quizSetFile = null;
     let customJsonData = null;
+    let deckMax = 1; // will be set dynamically
 
-    // Show popup menu on menu button click
+    // Helper: get deck size for a quizset (sync, for menu)
+    function getDeckSizeForQuizset(quizset) {
+        // These numbers should match your actual deck sizes
+        const sizes = {
+            hiragana: 46,
+            katakana: 46,
+            n5: 103,
+            n4: 167,
+            n3: 369,
+            n2: 367,
+            n1: 1006
+        };
+        return sizes[quizset] || 1;
+    }
+
+    // Set range fields and max label
+    function updateRangeFields(quizset) {
+        if (quizset === 'custom') {
+            rangeStartInput.disabled = true;
+            rangeEndInput.disabled = true;
+            rangeMaxLabel.textContent = '';
+            return;
+        }
+        deckMax = getDeckSizeForQuizset(quizset);
+        rangeStartInput.disabled = false;
+        rangeEndInput.disabled = false;
+        rangeStartInput.max = deckMax;
+        rangeEndInput.max = deckMax;
+        rangeEndInput.value = deckMax;
+        rangeMaxLabel.textContent = `/ ${deckMax}`;
+    }
+
+    // On menu open, restore previous selection and range
     menuButton.addEventListener('click', () => {
+        // Restore selection
+        const storedQuizset = localStorage.getItem('jlpt_quizset') || 'n5';
+        const radios = quizSetForm.elements['quizset'];
+        for (let radio of radios) {
+            radio.checked = (radio.value === storedQuizset);
+        }
+        updateRangeFields(storedQuizset);
+
+        // Restore range
+        let storedRange = localStorage.getItem('jlpt_quizset_range');
+        if (storedRange) {
+            try {
+                let {start, end} = JSON.parse(storedRange);
+                rangeStartInput.value = start;
+                rangeEndInput.value = end;
+            } catch {}
+        } else {
+            rangeStartInput.value = 1;
+            rangeEndInput.value = getDeckSizeForQuizset(storedQuizset);
+        }
         popupMenuOverlay.style.display = 'flex';
     });
 
-    // Hide popup menu on cancel
-    popupCancelBtn.addEventListener('click', () => {
-        popupMenuOverlay.style.display = 'none';
+    // Update range fields when quizset changes
+    quizSetForm.addEventListener('change', (e) => {
+        if (e.target.name === 'quizset') {
+            updateRangeFields(e.target.value);
+            if (e.target.value !== 'custom') {
+                rangeStartInput.value = 1;
+                rangeEndInput.value = getDeckSizeForQuizset(e.target.value);
+            }
+        }
     });
+
+    // Range validation
+    function clampRangeInputs() {
+        let start = parseInt(rangeStartInput.value, 10) || 1;
+        let end = parseInt(rangeEndInput.value, 10) || deckMax;
+        start = Math.max(1, Math.min(start, deckMax));
+        end = Math.max(1, Math.min(end, deckMax));
+        if (start > end) start = end;
+        rangeStartInput.value = start;
+        rangeEndInput.value = end;
+    }
+
+    // Clamp on input
+    rangeStartInput.addEventListener('input', clampRangeInputs);
+    rangeEndInput.addEventListener('input', clampRangeInputs);
 
     // OK button: handle quiz set selection
     popupOkBtn.addEventListener('click', () => {
         const selected = quizSetForm.quizset.value;
         if (selected === 'custom') {
-            // Show file picker
+            rangeStartInput.disabled = true;
+            rangeEndInput.disabled = true;
+            rangeMaxLabel.textContent = '';
             customJsonInput.value = '';
             customJsonInput.click();
         } else {
-            // Save selection to localStorage
+            clampRangeInputs();
+            // Save selection and range to localStorage
             localStorage.setItem('jlpt_quizset', selected);
-            // Map selection to file
-            let file = '';
-            switch (selected) {
-                case 'hiragana': file = 'db/hiragana.json'; break;
-                case 'katakana': file = 'db/katakana.json'; break;
-                case 'n5': file = 'db/N5.json'; break;
-                case 'n4': file = 'db/N4.json'; break;
-                case 'n3': file = 'db/N3.json'; break;
-                case 'n2': file = 'db/N2.json'; break;
-                case 'n1': file = 'db/N1.json'; break;
-                default: file = 'db/N5.json';
-            }
+            localStorage.setItem('jlpt_quizset_range', JSON.stringify({
+                start: parseInt(rangeStartInput.value, 10),
+                end: parseInt(rangeEndInput.value, 10)
+            }));
             localStorage.removeItem('jlpt_custom_json');
             window.location.reload();
         }
+        popupMenuOverlay.style.display = 'none';
+    });
+
+    // Hide popup menu on cancel
+    popupCancelBtn.addEventListener('click', () => {
         popupMenuOverlay.style.display = 'none';
     });
 
@@ -156,6 +233,16 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             let quizSet = getQuizSetFile();
             let data, isKanaFile = false;
+            let range = {start: 1, end: 1};
+            let storedQuizset = localStorage.getItem('jlpt_quizset') || 'n5';
+            let storedRange = localStorage.getItem('jlpt_quizset_range');
+            if (storedRange) {
+                try {
+                    range = JSON.parse(storedRange);
+                } catch {
+                    range = {start: 1, end: 1};
+                }
+            }
 
             if (typeof quizSet === 'object') {
                 data = quizSet;
@@ -169,19 +256,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Detect kana file by JLPTLevel or filename
-            const stored = localStorage.getItem('jlpt_quizset');
             if (
-                (stored === 'hiragana' || stored === 'katakana') ||
+                (storedQuizset === 'hiragana' || storedQuizset === 'katakana') ||
                 (typeof data.JLPTLevel === 'number' && (data.JLPTLevel === 7 || data.JLPTLevel === 6))
             ) {
                 isKanaFile = true;
             }
-
-            // Parse and normalize for kana files
             if (isKanaFile) {
                 kanjiData = data.MatchCards.map(card => ({
                     ...card,
-                    Kanji: card.Kana.trim(), // Use Kana as the main display
+                    Kanji: card.Kana.trim(),
                     Kana: card.Kana.trim(),
                     English: card.English.trim(),
                     OnYomi: "",
@@ -193,7 +277,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 kanjiData = data.MatchCards;
                 jlptLevel = typeof data.JLPTLevel === 'number' ? data.JLPTLevel : 5;
             }
-
+            totalKanjiCount = kanjiData.length;
+            // Clamp range to deck size
+            let startIdx = Math.max(1, Math.min(range.start, totalKanjiCount));
+            let endIdx = Math.max(1, Math.min(range.end, totalKanjiCount));
+            if (startIdx > endIdx) startIdx = endIdx;
+            // Slice deck to selected range (1-based to 0-based)
+            kanjiData = kanjiData.slice(startIdx - 1, endIdx);
             totalKanjiCount = kanjiData.length;
             remainingCount = totalKanjiCount;
             remainingCountElement.textContent = remainingCount;
