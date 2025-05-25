@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // These numbers should match your actual deck sizes
         const sizes = {
             hiragana: 72,
-            katakana: 71,
+            katakana: 72,
             n5: 103,
             n4: 181,
             n3: 420,
