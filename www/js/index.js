@@ -143,6 +143,18 @@ document.addEventListener('DOMContentLoaded', () => {
         start = Math.max(1, Math.min(start, deckMax));
         end = Math.max(1, Math.min(end, deckMax));
         if (start > end) start = end;
+        // Ensure at least 10 cards in range
+        if (end - start + 1 < 10) {
+            if (end + (10 - (end - start + 1)) <= deckMax) {
+                end = start + 9;
+            } else if (start - (10 - (end - start + 1)) >= 1) {
+                start = end - 9;
+            } else {
+                // fallback: set to max possible range
+                start = Math.max(1, deckMax - 9);
+                end = deckMax;
+            }
+        }
         rangeStartInput.value = start;
         rangeEndInput.value = end;
     }
