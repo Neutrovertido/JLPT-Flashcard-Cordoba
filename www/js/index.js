@@ -432,6 +432,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add a reference for the flip container
     let kanjiFlipContainer = null;
 
+    // Add a reference for the left panel
+    const leftPanel = document.querySelector('.left-panel');
+
     // Update the question display based on the question mode
     function updateQuestionDisplay() {
         // Create or reuse the flip container
@@ -559,6 +562,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (kanjiFlipContainer) {
             kanjiFlipContainer.classList.add('flipped');
         }
+        // Add margin-bottom to left-panel when flipped
+        if (leftPanel) {
+            leftPanel.classList.add('flipped');
+        }
     }
     
     // Next button click handler
@@ -575,6 +582,11 @@ document.addEventListener('DOMContentLoaded', () => {
             kanjiFlipContainer.classList.remove('flipped');
             // Force reflow to apply the no-transition state before next question
             void kanjiFlipContainer.offsetWidth;
+        }
+
+        // Reset left-panel margin-bottom
+        if (leftPanel) {
+            leftPanel.classList.remove('flipped');
         }
 
         kanjiDetail.style.display = 'none';

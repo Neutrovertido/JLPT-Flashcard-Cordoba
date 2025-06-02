@@ -445,8 +445,15 @@ button.active {
 }
 
 .left-panel {
+    /* Remove static margin-bottom, handled dynamically */
+    margin-bottom: 0;
+}
+
+/* Add margin-bottom only when flipped */
+.left-panel.flipped {
     margin-bottom: 100px;
 }
+
 /* On large screens, fix both to 400px */
 @media (min-width: 768px) {
     .kanji-flip-container,
