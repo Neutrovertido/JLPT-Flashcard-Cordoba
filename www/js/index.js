@@ -791,6 +791,11 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         }
 
+        // Add dim background overlay for popup effect
+        let overlay = document.createElement('div');
+        overlay.className = 'completion-popup-overlay';
+        document.body.appendChild(overlay);
+
         kanjiGrid.innerHTML = `
             <div class="completion-message">
                 <h2>Congratulations!</h2>
@@ -805,8 +810,9 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.add('completion-active');
 
         document.getElementById('restart-btn').addEventListener('click', () => {
-            // Remove pointer-events protection before reload
+            // Remove overlay and pointer-events protection before reload
             document.body.classList.remove('completion-active');
+            if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
             window.location.reload();
         });
     }

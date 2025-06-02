@@ -738,3 +738,13 @@ body, button, input, select, textarea, .popup-menu, .completion-message, .score,
 .kanji-flip-container .kanji-flip-back .kanji-detail {
     display: flex;
 }
+
+.completion-popup-overlay {
+    position: fixed;
+    z-index: 1999;
+    left: 0; top: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.35);
+    width: 100vw;
+    height: 100vh;
+    pointer-events: all;
+}
