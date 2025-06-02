@@ -527,7 +527,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Track wrong answers for spaced repetition
     let wrongKanjiList = [];
     let reviewQueue = [];
-    let reviewInterval = 3;
+    let reviewInterval = 5;
     let reviewCounter = 0;
     let reviewing = false;
 
