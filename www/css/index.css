@@ -572,30 +572,28 @@ button.active {
     box-shadow: 0 4px 24px rgba(46, 105, 48, 0.10), 0 1.5px 6px rgba(46, 105, 48, 0.08);
     border: 2px solid #2e6930;
     padding: 36px 28px 28px 28px;
-    margin: 30px auto 0 auto;
+    /* Remove margin for absolute centering */
+    margin: 0;
     max-width: 400px;
     text-align: center;
     color: #2e6930;
     animation: pop-in 0.4s cubic-bezier(.5,1.8,.5,1) 1;
+
+    /* Center absolutely in viewport */
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2000;
+    width: 90vw;
+    max-width: 400px;
+    pointer-events: all;
 }
 
-@keyframes pop-in {
-    0% { transform: scale(0.9); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-}
-
-.completion-message h2 {
-    font-size: 2.2em;
-    margin-bottom: 12px;
-    color: #2e6930;
-    font-weight: bold;
-    letter-spacing: 1px;
-}
-
-.completion-message p {
-    font-size: 1.15em;
-    margin: 10px 0;
-    color: #2e6930;
+/* Prevent interaction with background when completion message is visible */
+body.completion-active,
+body.completion-active *:not(.completion-message):not(.completion-message *) {
+    pointer-events: none !important;
 }
 
 .completion-message button#restart-btn {

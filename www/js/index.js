@@ -505,6 +505,9 @@ document.addEventListener('DOMContentLoaded', () => {
         kanjiDetail.style.display = 'none';
     }
     
+    // Track wrong answers
+    let wrongKanjiList = [];
+
     // Handle card click event
     function handleCardClick(event) {
         const selectedIndex = parseInt(event.target.dataset.index);
@@ -538,7 +541,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 correctCard.classList.add('correct-card');
             }
 
-            // Show kanji details (incorrect, yellow card)
+            // Track the wrong kanji
+            wrongKanjiList.push({
+                Kanji: currentKanji.Kanji,
+                Kana: currentKanji.Kana,
+                English: currentKanji.English
+            });
             showKanjiDetails(true);
         }
 
@@ -681,17 +689,38 @@ document.addEventListener('DOMContentLoaded', () => {
             default: deckLabel = 'Kanji';
         }
 
+        let wrongListHtml = '';
+        if (wrongKanjiList.length > 0) {
+            wrongListHtml = `
+                <div style="margin-top:18px;text-align:left;">
+                    <strong>Incorrect Kanji:</strong>
+                    <ul style="margin:8px 0 0 18px;padding:0;">
+                        ${wrongKanjiList.map(item =>
+                            `<li><span style="font-size:1.5em;font-family:'Noto Sans JP',sans-serif;">${item.Kanji}</span>
+                            <span style="font-size:1em;color:#555;">${item.Kana ? ' (' + item.Kana + ')' : ''}</span>
+                            <span style="font-size:0.95em;color:#333;">${item.English ? ' - ' + item.English : ''}</span></li>`
+                        ).join('')}
+                    </ul>
+                </div>
+            `;
+        }
+
         kanjiGrid.innerHTML = `
             <div class="completion-message">
                 <h2>Congratulations!</h2>
                 <p>You have completed all your ${deckLabel}.</p>
                 <p>Score: ${correctCount}/${correctCount + incorrectCount}</p>
+                ${wrongListHtml}
                 <button id="restart-btn">Restart Quiz</button>
             </div>
         `;
 
+        // Add pointer-events protection to background
+        document.body.classList.add('completion-active');
+
         document.getElementById('restart-btn').addEventListener('click', () => {
-            // Reset progress and reload deck/range
+            // Remove pointer-events protection before reload
+            document.body.classList.remove('completion-active');
             window.location.reload();
         });
     }
