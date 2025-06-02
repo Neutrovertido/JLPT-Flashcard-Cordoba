@@ -354,15 +354,34 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Select a random kanji from the data
     function selectRandomKanji() {
-        if (kanjiData.length === 0) {
-            return;
+        // If it's time for a review and there are items in the review queue, pick one at random
+        if (
+            reviewQueue.length > 0 &&
+            reviewCounter > 0 &&
+            reviewCounter % reviewInterval === 0
+        ) {
+            // Pick a random review item
+            const idx = Math.floor(Math.random() * reviewQueue.length);
+            currentKanji = reviewQueue[idx];
+            currentKanji._isReview = true;
+            reviewing = true;
+        } else if (kanjiData.length > 0) {
+            const randomIndex = Math.floor(Math.random() * kanjiData.length);
+            currentKanji = kanjiData[randomIndex];
+            currentKanji._isReview = false;
+            reviewing = false;
+            kanjiData.splice(randomIndex, 1);
+        } else if (reviewQueue.length > 0) {
+            // If main deck is empty but review remains, always review
+            const idx = Math.floor(Math.random() * reviewQueue.length);
+            currentKanji = reviewQueue[idx];
+            currentKanji._isReview = true;
+            reviewing = true;
+        } else {
+            currentKanji = null;
+            reviewing = false;
         }
-
-        const randomIndex = Math.floor(Math.random() * kanjiData.length);
-        currentKanji = kanjiData[randomIndex];
-
-        // Remove selected kanji from the data to avoid repetition
-        kanjiData.splice(randomIndex, 1);
+        reviewCounter++;
     }
     
     // Generate 9 options (1 correct, 8 distractors)
@@ -429,13 +448,35 @@ document.addEventListener('DOMContentLoaded', () => {
         updateQuestionDisplay();
     }
     
+    // Add a reference for the flip container
+    let kanjiFlipContainer = null;
+
+    // Add a reference for the left panel
+    const leftPanel = document.querySelector('.left-panel');
+
     // Update the question display based on the question mode
     function updateQuestionDisplay() {
+        // Create or reuse the flip container
+        if (!kanjiFlipContainer) {
+            kanjiFlipContainer = document.createElement('div');
+            kanjiFlipContainer.className = 'kanji-flip-container';
+            kanjiFlipContainer.innerHTML = `
+                <div class="kanji-flip-inner">
+                    <div class="kanji-flip-front"></div>
+                    <div class="kanji-flip-back"></div>
+                </div>
+            `;
+            kanjiQuestionContainer.innerHTML = '';
+            kanjiQuestionContainer.appendChild(kanjiFlipContainer);
+        } else {
+            kanjiFlipContainer.classList.remove('flipped');
+        }
+
+        // Build the kanji-display for the front
         const questionContainer = document.createElement('div');
         questionContainer.classList.add('kanji-display');
 
         let questionText = '';
-
         switch (questionMode) {
             case 'kanji':
                 questionText = currentKanji.Kanji;
@@ -448,17 +489,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
         }
 
-        // Create the kanji character element
         const kanjiCharElement = document.createElement('div');
         kanjiCharElement.classList.add('kanji-character');
         kanjiCharElement.textContent = questionText;
         questionContainer.appendChild(kanjiCharElement);
 
-        // Create the footer
         const footerElement = document.createElement('div');
         footerElement.classList.add('kanji-footer');
-
-        // Create the level indicator
         const levelElement = document.createElement('div');
         levelElement.classList.add('kanji-level');
         const levelLabel = jlptLevel === 0 || jlptLevel > 5
@@ -467,37 +504,95 @@ document.addEventListener('DOMContentLoaded', () => {
         levelElement.textContent = levelLabel;
         footerElement.appendChild(levelElement);
 
-        // Create the counter
         const counterElement = document.createElement('div');
         counterElement.classList.add('kanji-counter');
         counterElement.textContent = `${totalKanjiCount + 1 - remainingCount} of ${totalKanjiCount}`;
         footerElement.appendChild(counterElement);
 
-        // Add footer to the container
         questionContainer.appendChild(footerElement);
 
-        // Clear previous question display
-        kanjiQuestionContainer.innerHTML = '';
-        kanjiQuestionContainer.appendChild(questionContainer);
+        // Place the kanji-display in the front face
+        kanjiFlipContainer.querySelector('.kanji-flip-front').innerHTML = '';
+        kanjiFlipContainer.querySelector('.kanji-flip-front').appendChild(questionContainer);
 
-        // Make sure we don't have other kanji-display elements elsewhere
-        const oldDisplays = document.querySelectorAll('.kanji-display:not(:first-child)');
-        oldDisplays.forEach(element => element.remove());
+        // Place the kanji-detail in the back face (hidden until flipped)
+        kanjiFlipContainer.querySelector('.kanji-flip-back').innerHTML = '';
+        kanjiFlipContainer.querySelector('.kanji-flip-back').appendChild(kanjiDetail);
+
+        // Show only the flip container
+        kanjiFlipContainer.style.display = '';
+        kanjiDetail.style.display = 'none';
     }
     
+    // Track wrong answers for spaced repetition
+    let wrongKanjiList = [];
+    let reviewQueue = [];
+    let reviewInterval = 5;
+    let reviewCounter = 0;
+    let reviewing = false;
+
     // Handle card click event
     function handleCardClick(event) {
         const selectedIndex = parseInt(event.target.dataset.index);
 
-        // Check if the answer is correct
+        // If this is a review card, handle differently
+        if (currentKanji && currentKanji._isReview) {
+            if (selectedIndex === correctOption) {
+                event.target.classList.add('correct-card');
+                // Remove from reviewQueue
+                reviewQueue = reviewQueue.filter(k => k.Kanji !== currentKanji.Kanji);
+                // Show kanji details (review correct, blue)
+                showKanjiDetails(false, "review-correct");
+            } else {
+                // Show as incorrect, but do not increment incorrectCount
+                const option = displayedOptions[selectedIndex];
+                event.target.classList.add('incorrect-card');
+                event.target.innerHTML = `
+                    <span class="wrong-x">✗</span>
+                    <div class="card-kanji">${option.Kanji}</div>
+                    <div class="card-kana">${option.Kana}</div>
+                    <div class="card-english">${option.English}</div>
+                `;
+                // Ensure it's still in reviewQueue
+                if (!reviewQueue.some(k => k.Kanji === currentKanji.Kanji)) {
+                    reviewQueue.push({...currentKanji});
+                }
+                // Show kanji details (review incorrect, red)
+                showKanjiDetails(true, "review-wrong");
+            }
+
+            // No score update for review cards
+
+            // Disable all cards to prevent multiple selections
+            const cards = kanjiGrid.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.removeEventListener('click', handleCardClick);
+                card.style.cursor = 'default';
+            });
+
+            // Show next button and hide mode selectors
+            modeSelector.style.display = 'none';
+            questionModeSection.style.display = 'none';
+            nextButtonContainer.style.display = 'flex';
+
+            // FLIP ANIMATION: trigger flip to show kanji-detail
+            if (kanjiFlipContainer) {
+                kanjiFlipContainer.classList.add('flipped');
+            }
+            // Add margin-bottom to left-panel when flipped
+            if (leftPanel) {
+                leftPanel.classList.add('flipped');
+            }
+            return;
+        }
+
+        // Normal card handling
         if (selectedIndex === correctOption) {
             // Correct answer
             event.target.classList.add('correct-card');
             correctCount++;
             correctCountElement.textContent = correctCount;
-
-            // Show kanji details
-            showKanjiDetails();
+            showKanjiDetails(false);
         } else {
             // Incorrect answer
             // Replace card content with custom layout
@@ -517,9 +612,20 @@ document.addEventListener('DOMContentLoaded', () => {
             if (correctCard) {
                 correctCard.classList.add('correct-card');
             }
+
+            // Track the wrong kanji for review and for display at end
+            wrongKanjiList.push({
+                Kanji: currentKanji.Kanji,
+                Kana: currentKanji.Kana,
+                English: currentKanji.English
+            });
+            // Add to review queue if not already present
+            if (!reviewQueue.some(k => k.Kanji === currentKanji.Kanji)) {
+                reviewQueue.push({...currentKanji});
+            }
+            showKanjiDetails(true);
         }
 
-        // Update remaining count
         remainingCount--;
         remainingCountElement.textContent = remainingCount;
 
@@ -534,6 +640,15 @@ document.addEventListener('DOMContentLoaded', () => {
         modeSelector.style.display = 'none';
         questionModeSection.style.display = 'none';
         nextButtonContainer.style.display = 'flex';
+
+        // FLIP ANIMATION: trigger flip to show kanji-detail
+        if (kanjiFlipContainer) {
+            kanjiFlipContainer.classList.add('flipped');
+        }
+        // Add margin-bottom to left-panel when flipped
+        if (leftPanel) {
+            leftPanel.classList.add('flipped');
+        }
     }
     
     // Next button click handler
@@ -544,55 +659,93 @@ document.addEventListener('DOMContentLoaded', () => {
         nextButtonContainer.style.display = 'none';
         modeSelector.style.display = 'flex';
         questionModeSection.style.display = 'flex';
-        
-        // Remove kanji display if it exists
-        if (document.querySelector('.kanji-display')) {
-            document.querySelector('.kanji-display').remove();
+
+        // Reset flip animation instantly (no transition)
+        if (kanjiFlipContainer) {
+            kanjiFlipContainer.classList.remove('flipped');
+            // Force reflow to apply the no-transition state before next question
+            void kanjiFlipContainer.offsetWidth;
+        }
+
+        // Reset left-panel margin-bottom
+        if (leftPanel) {
+            leftPanel.classList.remove('flipped');
         }
 
         kanjiDetail.style.display = 'none';
         kanjiDetail.parentElement.style.gap = '0';
-        
+
         // Start the next question
         startQuiz();
     }
     
-    // Show kanji details when correct answer is chosen
-    function showKanjiDetails() {
-        // Hide the kanji display div
-        const kanjiDisplayElement = document.querySelector('.kanji-display');
-        if (kanjiDisplayElement) {
-            kanjiDisplayElement.style.display = 'none';
-        }
-        
+    // Show kanji details when correct or incorrect answer is chosen
+    // reviewType: "review-correct" | "review-wrong" | undefined
+    function showKanjiDetails(isIncorrect = false, reviewType = undefined) {
+        // No need to hide kanji-display, flip animation will handle it
+
         currentKanjiElement.textContent = currentKanji.Kanji;
         kanjiEnglishElement.textContent = currentKanji.English;
         kanjiKanaElement.textContent = currentKanji.Kana;
         kunYomiElement.textContent = currentKanji.KunYomi;
         onYomiElement.textContent = currentKanji.OnYomi;
-        
+
         // Display examples
         examplesListElement.innerHTML = '';
         if (currentKanji.Examples && currentKanji.Examples.length > 0) {
             // Display up to 4 examples
             const exampleCount = Math.min(4, currentKanji.Examples.length);
-            
+
             for (let i = 0; i < exampleCount; i++) {
                 const example = currentKanji.Examples[i];
                 const exampleElement = document.createElement('div');
                 exampleElement.classList.add('example-item');
-                
+
                 exampleElement.innerHTML = `
                     <span>${example.KanjiWord} ( ${example.KanaWord})</span>
                     <span>${example.EnglishWord}</span>
                 `;
-                
+
                 examplesListElement.appendChild(exampleElement);
             }
         }
-        
+
+        // Set color for kanji-card
+        const kanjiCard = kanjiDetail.querySelector('.kanji-card');
+        if (kanjiCard) {
+            kanjiCard.classList.remove('review-kanji-card', 'review-wrong-kanji-card');
+            if (reviewType === "review-correct") {
+                kanjiCard.classList.add('review-kanji-card');
+                kanjiCard.classList.remove('incorrect-kanji-card');
+                kanjiCard.classList.remove('correct-kanji-card');
+            } else if (reviewType === "review-wrong") {
+                kanjiCard.classList.add('review-wrong-kanji-card');
+                kanjiCard.classList.remove('review-kanji-card');
+                kanjiCard.classList.remove('correct-kanji-card');
+                kanjiCard.classList.remove('incorrect-kanji-card');
+            } else if (isIncorrect) {
+                kanjiCard.classList.add('incorrect-kanji-card');
+                kanjiCard.classList.remove('correct-kanji-card');
+            } else {
+                kanjiCard.classList.remove('incorrect-kanji-card');
+                kanjiCard.classList.add('correct-kanji-card');
+            }
+        }
+
+        // Set color for kanji-info-header
+        const kanjiInfoHeader = kanjiDetail.querySelector('.kanji-info-header');
+        if (kanjiInfoHeader) {
+            if (isIncorrect) {
+                kanjiInfoHeader.classList.add('incorrect-kanji-info-header');
+                kanjiInfoHeader.classList.remove('correct-kanji-info-header');
+            } else {
+                kanjiInfoHeader.classList.remove('incorrect-kanji-info-header');
+                kanjiInfoHeader.classList.add('correct-kanji-info-header');
+            }
+        }
+
+        // Show kanji-detail in the flip back face (handled by CSS)
         kanjiDetail.style.display = 'flex';
-        
     }
     
     // Show completion message when all kanji have been reviewed
@@ -622,17 +775,44 @@ document.addEventListener('DOMContentLoaded', () => {
             default: deckLabel = 'Kanji';
         }
 
+        let wrongListHtml = '';
+        if (wrongKanjiList.length > 0) {
+            wrongListHtml = `
+                <div style="margin-top:18px;text-align:left;">
+                    <strong>Incorrect Kanji:</strong>
+                    <ul style="margin:8px 0 0 18px;padding:0;">
+                        ${wrongKanjiList.map(item =>
+                            `<li><span style="font-size:1.5em;font-family:'Noto Sans JP',sans-serif;">${item.Kanji}</span>
+                            <span style="font-size:1em;color:#555;">${item.Kana ? ' (' + item.Kana + ')' : ''}</span>
+                            <span style="font-size:0.95em;color:#333;">${item.English ? ' - ' + item.English : ''}</span></li>`
+                        ).join('')}
+                    </ul>
+                </div>
+            `;
+        }
+
+        // Add dim background overlay for popup effect
+        let overlay = document.createElement('div');
+        overlay.className = 'completion-popup-overlay';
+        document.body.appendChild(overlay);
+
         kanjiGrid.innerHTML = `
             <div class="completion-message">
                 <h2>Congratulations!</h2>
                 <p>You have completed all your ${deckLabel}.</p>
                 <p>Score: ${correctCount}/${correctCount + incorrectCount}</p>
+                ${wrongListHtml}
                 <button id="restart-btn">Restart Quiz</button>
             </div>
         `;
 
+        // Add pointer-events protection to background
+        document.body.classList.add('completion-active');
+
         document.getElementById('restart-btn').addEventListener('click', () => {
-            // Reset progress and reload deck/range
+            // Remove overlay and pointer-events protection before reload
+            document.body.classList.remove('completion-active');
+            if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
             window.location.reload();
         });
     }

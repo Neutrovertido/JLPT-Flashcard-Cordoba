@@ -70,6 +70,25 @@ body {
     padding: 0px 20px;
 }
 
+/* Add correct/incorrect kanji-card highlight */
+.kanji-card.correct-kanji-card {
+    background-color: #2e6930; /* default green */
+}
+
+.kanji-card.incorrect-kanji-card {
+    background-color: #ffe066; /* yellow */
+    color: #222;
+}
+
+.kanji-card.review-kanji-card {
+    background-color: #2a4d9c !important; /* blue */
+    color: #fff !important;
+}
+.kanji-card.review-wrong-kanji-card {
+    background-color: #6a1cb7 !important; /* deep red */
+    color: #fff !important;
+}
+
 .kanji-character {
     font-size: 100px;
     line-height: 1;
@@ -77,12 +96,22 @@ body {
 
 .kanji-info {
     padding: 15px;
+    width: 100%;
 }
 
 .kanji-info-header {
     background-color: #e8ffe8;
     padding: 10px;
     border-radius: 4px;
+}
+
+/* Add correct/incorrect kanji-info-header highlight */
+.kanji-info-header.correct-kanji-info-header {
+    background-color: #e8ffe8; /* default greenish */
+}
+
+.kanji-info-header.incorrect-kanji-info-header {
+    background-color: #fff6cc; /* yellow */
 }
 
 .english {
@@ -221,7 +250,7 @@ button.active {
     background-color: #2e6930;
     box-shadow: 0px 5px 6px rgba(0, 0, 0, 0.25);
     color: white;
-    font-size: 80px;
+    font-size: 80px;    
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -397,6 +426,60 @@ button.active {
     }
 }
 
+/* Default: small screens */
+.kanji-flip-container,
+.kanji-flip-inner,
+.kanji-flip-front,
+.kanji-flip-back {
+    width: 100%;
+    height: 100%;
+    min-height: 220px;
+    max-height: 400px;
+}
+
+.kanji-flip-front .kanji-display {
+    width: 100%;
+    height: 220px;
+    min-height: 220px;
+    max-height: 220px;
+    box-sizing: border-box;
+}
+
+.kanji-flip-back .kanji-detail {
+    width: 100%;
+    height: 400px;
+    min-height: 300px !important;
+    max-height: 300px !important;
+    box-sizing: border-box;
+}
+
+.left-panel {
+    /* Remove static margin-bottom, handled dynamically */
+    margin-bottom: 0;
+}
+
+/* Add margin-bottom only when flipped */
+.left-panel.flipped {
+    margin-bottom: 100px;
+}
+
+/* On large screens, fix both to 400px */
+@media (min-width: 768px) {
+    .kanji-flip-container,
+    .kanji-flip-inner,
+    .kanji-flip-front,
+    .kanji-flip-back,
+    .kanji-flip-front .kanji-display,
+    .kanji-flip-back .kanji-detail {
+        min-height: 400px !important;
+        height: 400px !important;
+        max-height: 400px !important;
+    }
+    .kanji-flip-container {
+        margin-bottom: 0;
+    }
+}
+
 .popup-menu-overlay {
     position: fixed;
     z-index: 1000;
@@ -498,30 +581,28 @@ button.active {
     box-shadow: 0 4px 24px rgba(46, 105, 48, 0.10), 0 1.5px 6px rgba(46, 105, 48, 0.08);
     border: 2px solid #2e6930;
     padding: 36px 28px 28px 28px;
-    margin: 30px auto 0 auto;
+    /* Remove margin for absolute centering */
+    margin: 0;
     max-width: 400px;
     text-align: center;
     color: #2e6930;
     animation: pop-in 0.4s cubic-bezier(.5,1.8,.5,1) 1;
+
+    /* Center absolutely in viewport */
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2000;
+    width: 90vw;
+    max-width: 400px;
+    pointer-events: all;
 }
 
-@keyframes pop-in {
-    0% { transform: scale(0.9); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-}
-
-.completion-message h2 {
-    font-size: 2.2em;
-    margin-bottom: 12px;
-    color: #2e6930;
-    font-weight: bold;
-    letter-spacing: 1px;
-}
-
-.completion-message p {
-    font-size: 1.15em;
-    margin: 10px 0;
-    color: #2e6930;
+/* Prevent interaction with background when completion message is visible */
+body.completion-active,
+body.completion-active *:not(.completion-message):not(.completion-message *) {
+    pointer-events: none !important;
 }
 
 .completion-message button#restart-btn {
@@ -584,4 +665,86 @@ body, button, input, select, textarea, .popup-menu, .completion-message, .score,
     font-family: 'Noto Sans JP', 'Noto Sans', Arial, sans-serif;
     font-feature-settings: "palt";
     font-weight: 500;
+}
+
+/* Card flip animation container */
+.kanji-flip-container {
+    perspective: 1200px;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 220px;
+}
+
+.kanji-flip-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    /* Remove transition from here, move to .kanji-flip-container.flipped .kanji-flip-inner */
+    transform-style: preserve-3d;
+}
+
+.kanji-flip-container.flipped .kanji-flip-inner {
+    transition: transform 0.6s cubic-bezier(.4,1.7,.6,1);
+    transform: rotateY(180deg);
+}
+
+.kanji-flip-container:not(.flipped) .kanji-flip-inner {
+    /* No transition when flipping out */
+    transition: none;
+    transform: none;
+}
+
+.kanji-flip-container.flipped .kanji-flip-inner {
+    transform: rotateY(180deg);
+}
+
+.kanji-flip-container:not(.flipped) .kanji-flip-inner {
+    /* No transition when flipping out */
+    transition: none;
+    transform: none;
+}
+
+.kanji-flip-front, .kanji-flip-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0; left: 0;
+    backface-visibility: hidden;
+}
+
+.kanji-flip-front {
+    z-index: 2;
+}
+
+.kanji-flip-back {
+    transform: rotateY(180deg);
+    z-index: 3;
+}
+
+/* Ensure .kanji-display and .kanji-detail fill the flip faces */
+.kanji-flip-front .kanji-display,
+.kanji-flip-back .kanji-detail {
+    width: 100%;
+    height: 100%;
+    min-height: 220px;
+}
+
+/* Hide .kanji-detail by default, but show when in flip-back */
+.kanji-detail {
+    display: none;
+}
+
+.kanji-flip-container .kanji-flip-back .kanji-detail {
+    display: flex;
+}
+
+.completion-popup-overlay {
+    position: fixed;
+    z-index: 1999;
+    left: 0; top: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.35);
+    width: 100vw;
+    height: 100vh;
+    pointer-events: all;
 }
