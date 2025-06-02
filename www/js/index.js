@@ -496,8 +496,8 @@ document.addEventListener('DOMContentLoaded', () => {
             correctCount++;
             correctCountElement.textContent = correctCount;
 
-            // Show kanji details
-            showKanjiDetails();
+            // Show kanji details (correct)
+            showKanjiDetails(false);
         } else {
             // Incorrect answer
             // Replace card content with custom layout
@@ -517,6 +517,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (correctCard) {
                 correctCard.classList.add('correct-card');
             }
+
+            // Show kanji details (incorrect, yellow card)
+            showKanjiDetails(true);
         }
 
         // Update remaining count
@@ -557,42 +560,65 @@ document.addEventListener('DOMContentLoaded', () => {
         startQuiz();
     }
     
-    // Show kanji details when correct answer is chosen
-    function showKanjiDetails() {
+    // Show kanji details when correct or incorrect answer is chosen
+    function showKanjiDetails(isIncorrect = false) {
         // Hide the kanji display div
         const kanjiDisplayElement = document.querySelector('.kanji-display');
         if (kanjiDisplayElement) {
             kanjiDisplayElement.style.display = 'none';
         }
-        
+
         currentKanjiElement.textContent = currentKanji.Kanji;
         kanjiEnglishElement.textContent = currentKanji.English;
         kanjiKanaElement.textContent = currentKanji.Kana;
         kunYomiElement.textContent = currentKanji.KunYomi;
         onYomiElement.textContent = currentKanji.OnYomi;
-        
+
         // Display examples
         examplesListElement.innerHTML = '';
         if (currentKanji.Examples && currentKanji.Examples.length > 0) {
             // Display up to 4 examples
             const exampleCount = Math.min(4, currentKanji.Examples.length);
-            
+
             for (let i = 0; i < exampleCount; i++) {
                 const example = currentKanji.Examples[i];
                 const exampleElement = document.createElement('div');
                 exampleElement.classList.add('example-item');
-                
+
                 exampleElement.innerHTML = `
                     <span>${example.KanjiWord} ( ${example.KanaWord})</span>
                     <span>${example.EnglishWord}</span>
                 `;
-                
+
                 examplesListElement.appendChild(exampleElement);
             }
         }
-        
+
+        // Set color for kanji-card
+        const kanjiCard = kanjiDetail.querySelector('.kanji-card');
+        if (kanjiCard) {
+            if (isIncorrect) {
+                kanjiCard.classList.add('incorrect-kanji-card');
+                kanjiCard.classList.remove('correct-kanji-card');
+            } else {
+                kanjiCard.classList.remove('incorrect-kanji-card');
+                kanjiCard.classList.add('correct-kanji-card');
+            }
+        }
+
+        // Set color for kanji-info-header
+        const kanjiInfoHeader = kanjiDetail.querySelector('.kanji-info-header');
+        if (kanjiInfoHeader) {
+            if (isIncorrect) {
+                kanjiInfoHeader.classList.add('incorrect-kanji-info-header');
+                kanjiInfoHeader.classList.remove('correct-kanji-info-header');
+            } else {
+                kanjiInfoHeader.classList.remove('incorrect-kanji-info-header');
+                kanjiInfoHeader.classList.add('correct-kanji-info-header');
+            }
+        }
+
         kanjiDetail.style.display = 'flex';
-        
     }
     
     // Show completion message when all kanji have been reviewed
