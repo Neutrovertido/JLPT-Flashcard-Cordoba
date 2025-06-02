@@ -429,13 +429,32 @@ document.addEventListener('DOMContentLoaded', () => {
         updateQuestionDisplay();
     }
     
+    // Add a reference for the flip container
+    let kanjiFlipContainer = null;
+
     // Update the question display based on the question mode
     function updateQuestionDisplay() {
+        // Create or reuse the flip container
+        if (!kanjiFlipContainer) {
+            kanjiFlipContainer = document.createElement('div');
+            kanjiFlipContainer.className = 'kanji-flip-container';
+            kanjiFlipContainer.innerHTML = `
+                <div class="kanji-flip-inner">
+                    <div class="kanji-flip-front"></div>
+                    <div class="kanji-flip-back"></div>
+                </div>
+            `;
+            kanjiQuestionContainer.innerHTML = '';
+            kanjiQuestionContainer.appendChild(kanjiFlipContainer);
+        } else {
+            kanjiFlipContainer.classList.remove('flipped');
+        }
+
+        // Build the kanji-display for the front
         const questionContainer = document.createElement('div');
         questionContainer.classList.add('kanji-display');
 
         let questionText = '';
-
         switch (questionMode) {
             case 'kanji':
                 questionText = currentKanji.Kanji;
@@ -448,17 +467,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
         }
 
-        // Create the kanji character element
         const kanjiCharElement = document.createElement('div');
         kanjiCharElement.classList.add('kanji-character');
         kanjiCharElement.textContent = questionText;
         questionContainer.appendChild(kanjiCharElement);
 
-        // Create the footer
         const footerElement = document.createElement('div');
         footerElement.classList.add('kanji-footer');
-
-        // Create the level indicator
         const levelElement = document.createElement('div');
         levelElement.classList.add('kanji-level');
         const levelLabel = jlptLevel === 0 || jlptLevel > 5
@@ -467,22 +482,24 @@ document.addEventListener('DOMContentLoaded', () => {
         levelElement.textContent = levelLabel;
         footerElement.appendChild(levelElement);
 
-        // Create the counter
         const counterElement = document.createElement('div');
         counterElement.classList.add('kanji-counter');
         counterElement.textContent = `${totalKanjiCount + 1 - remainingCount} of ${totalKanjiCount}`;
         footerElement.appendChild(counterElement);
 
-        // Add footer to the container
         questionContainer.appendChild(footerElement);
 
-        // Clear previous question display
-        kanjiQuestionContainer.innerHTML = '';
-        kanjiQuestionContainer.appendChild(questionContainer);
+        // Place the kanji-display in the front face
+        kanjiFlipContainer.querySelector('.kanji-flip-front').innerHTML = '';
+        kanjiFlipContainer.querySelector('.kanji-flip-front').appendChild(questionContainer);
 
-        // Make sure we don't have other kanji-display elements elsewhere
-        const oldDisplays = document.querySelectorAll('.kanji-display:not(:first-child)');
-        oldDisplays.forEach(element => element.remove());
+        // Place the kanji-detail in the back face (hidden until flipped)
+        kanjiFlipContainer.querySelector('.kanji-flip-back').innerHTML = '';
+        kanjiFlipContainer.querySelector('.kanji-flip-back').appendChild(kanjiDetail);
+
+        // Show only the flip container
+        kanjiFlipContainer.style.display = '';
+        kanjiDetail.style.display = 'none';
     }
     
     // Handle card click event
@@ -537,6 +554,11 @@ document.addEventListener('DOMContentLoaded', () => {
         modeSelector.style.display = 'none';
         questionModeSection.style.display = 'none';
         nextButtonContainer.style.display = 'flex';
+
+        // FLIP ANIMATION: trigger flip to show kanji-detail
+        if (kanjiFlipContainer) {
+            kanjiFlipContainer.classList.add('flipped');
+        }
     }
     
     // Next button click handler
@@ -547,26 +569,24 @@ document.addEventListener('DOMContentLoaded', () => {
         nextButtonContainer.style.display = 'none';
         modeSelector.style.display = 'flex';
         questionModeSection.style.display = 'flex';
-        
-        // Remove kanji display if it exists
-        if (document.querySelector('.kanji-display')) {
-            document.querySelector('.kanji-display').remove();
+
+        // Reset flip animation instantly (no transition)
+        if (kanjiFlipContainer) {
+            kanjiFlipContainer.classList.remove('flipped');
+            // Force reflow to apply the no-transition state before next question
+            void kanjiFlipContainer.offsetWidth;
         }
 
         kanjiDetail.style.display = 'none';
         kanjiDetail.parentElement.style.gap = '0';
-        
+
         // Start the next question
         startQuiz();
     }
     
     // Show kanji details when correct or incorrect answer is chosen
     function showKanjiDetails(isIncorrect = false) {
-        // Hide the kanji display div
-        const kanjiDisplayElement = document.querySelector('.kanji-display');
-        if (kanjiDisplayElement) {
-            kanjiDisplayElement.style.display = 'none';
-        }
+        // No need to hide kanji-display, flip animation will handle it
 
         currentKanjiElement.textContent = currentKanji.Kanji;
         kanjiEnglishElement.textContent = currentKanji.English;
@@ -618,6 +638,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        // Show kanji-detail in the flip back face (handled by CSS)
         kanjiDetail.style.display = 'flex';
     }
     

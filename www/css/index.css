@@ -87,6 +87,7 @@ body {
 
 .kanji-info {
     padding: 15px;
+    width: 100%;
 }
 
 .kanji-info-header {
@@ -416,6 +417,53 @@ button.active {
     }
 }
 
+/* Default: small screens */
+.kanji-flip-container,
+.kanji-flip-inner,
+.kanji-flip-front,
+.kanji-flip-back {
+    width: 100%;
+    height: 100%;
+    min-height: 220px;
+    max-height: 400px;
+}
+
+.kanji-flip-front .kanji-display {
+    width: 100%;
+    height: 220px;
+    min-height: 220px;
+    max-height: 220px;
+    box-sizing: border-box;
+}
+
+.kanji-flip-back .kanji-detail {
+    width: 100%;
+    height: 400px;
+    min-height: 300px !important;
+    max-height: 300px !important;
+    box-sizing: border-box;
+}
+
+.left-panel {
+    margin-bottom: 100px;
+}
+/* On large screens, fix both to 400px */
+@media (min-width: 768px) {
+    .kanji-flip-container,
+    .kanji-flip-inner,
+    .kanji-flip-front,
+    .kanji-flip-back,
+    .kanji-flip-front .kanji-display,
+    .kanji-flip-back .kanji-detail {
+        min-height: 400px !important;
+        height: 400px !important;
+        max-height: 400px !important;
+    }
+    .kanji-flip-container {
+        margin-bottom: 0;
+    }
+}
+
 .popup-menu-overlay {
     position: fixed;
     z-index: 1000;
@@ -603,4 +651,76 @@ body, button, input, select, textarea, .popup-menu, .completion-message, .score,
     font-family: 'Noto Sans JP', 'Noto Sans', Arial, sans-serif;
     font-feature-settings: "palt";
     font-weight: 500;
+}
+
+/* Card flip animation container */
+.kanji-flip-container {
+    perspective: 1200px;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 220px;
+}
+
+.kanji-flip-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    /* Remove transition from here, move to .kanji-flip-container.flipped .kanji-flip-inner */
+    transform-style: preserve-3d;
+}
+
+.kanji-flip-container.flipped .kanji-flip-inner {
+    transition: transform 0.6s cubic-bezier(.4,1.7,.6,1);
+    transform: rotateY(180deg);
+}
+
+.kanji-flip-container:not(.flipped) .kanji-flip-inner {
+    /* No transition when flipping out */
+    transition: none;
+    transform: none;
+}
+
+.kanji-flip-container.flipped .kanji-flip-inner {
+    transform: rotateY(180deg);
+}
+
+.kanji-flip-container:not(.flipped) .kanji-flip-inner {
+    /* No transition when flipping out */
+    transition: none;
+    transform: none;
+}
+
+.kanji-flip-front, .kanji-flip-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0; left: 0;
+    backface-visibility: hidden;
+}
+
+.kanji-flip-front {
+    z-index: 2;
+}
+
+.kanji-flip-back {
+    transform: rotateY(180deg);
+    z-index: 3;
+}
+
+/* Ensure .kanji-display and .kanji-detail fill the flip faces */
+.kanji-flip-front .kanji-display,
+.kanji-flip-back .kanji-detail {
+    width: 100%;
+    height: 100%;
+    min-height: 220px;
+}
+
+/* Hide .kanji-detail by default, but show when in flip-back */
+.kanji-detail {
+    display: none;
+}
+
+.kanji-flip-container .kanji-flip-back .kanji-detail {
+    display: flex;
 }
