@@ -6,13 +6,14 @@ A web-based flashcard-style quiz for practicing all JLPT N5-N1 kanji and kana, f
 
 **Contributions are welcome!**
 
-![Interface](img/UI.png)
+![Interface](img/showcase.png)
 
 ## Features
 
 - **9-tile flashcard grid:** Each question presents 9 possible answers.
 - **Flexible question/answer modes:** Switch between Kanji, Kana, or English for the question, and Kana or English for the answer.
-- **Detailed kanji info:** After a correct answer, see readings, meanings, and example words.
+- **Spaced Repetition Study:** Leverage the power of the science of learning to improve your Kanji/Kana proficiency.
+- **Detailed kanji info:** After clicking an answer, see readings, meanings, and example words.
 - **Progress tracking:** See your correct/incorrect count and remaining kanji.
 - **Responsive design:** Works well on desktop and mobile. Can be made into a mobile app.
 - **Data-driven:** Loads kanji and example data from `db/` json files.
@@ -120,6 +121,8 @@ AI was heavily used for the development of this project.
 The idea is inspired from http://www.studykanji.net, however, as there is no portable version for Android systems nor can it be used offline, there was a necessity to create a similar project. The kanji readings (namely the JSON) comes mostly from their site.
 
 **No development to closely resemble ALL or MOST of their features will be done.** This is purely a barebones flashcard version.
+
+> It also presents features of its own! 🌟
 
 ---
 
