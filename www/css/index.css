@@ -80,6 +80,15 @@ body {
     color: #222;
 }
 
+.kanji-card.review-kanji-card {
+    background-color: #2a4d9c !important; /* blue */
+    color: #fff !important;
+}
+.kanji-card.review-wrong-kanji-card {
+    background-color: #6a1cb7 !important; /* deep red */
+    color: #fff !important;
+}
+
 .kanji-character {
     font-size: 100px;
     line-height: 1;

@@ -354,15 +354,34 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Select a random kanji from the data
     function selectRandomKanji() {
-        if (kanjiData.length === 0) {
-            return;
+        // If it's time for a review and there are items in the review queue, pick one at random
+        if (
+            reviewQueue.length > 0 &&
+            reviewCounter > 0 &&
+            reviewCounter % reviewInterval === 0
+        ) {
+            // Pick a random review item
+            const idx = Math.floor(Math.random() * reviewQueue.length);
+            currentKanji = reviewQueue[idx];
+            currentKanji._isReview = true;
+            reviewing = true;
+        } else if (kanjiData.length > 0) {
+            const randomIndex = Math.floor(Math.random() * kanjiData.length);
+            currentKanji = kanjiData[randomIndex];
+            currentKanji._isReview = false;
+            reviewing = false;
+            kanjiData.splice(randomIndex, 1);
+        } else if (reviewQueue.length > 0) {
+            // If main deck is empty but review remains, always review
+            const idx = Math.floor(Math.random() * reviewQueue.length);
+            currentKanji = reviewQueue[idx];
+            currentKanji._isReview = true;
+            reviewing = true;
+        } else {
+            currentKanji = null;
+            reviewing = false;
         }
-
-        const randomIndex = Math.floor(Math.random() * kanjiData.length);
-        currentKanji = kanjiData[randomIndex];
-
-        // Remove selected kanji from the data to avoid repetition
-        kanjiData.splice(randomIndex, 1);
+        reviewCounter++;
     }
     
     // Generate 9 options (1 correct, 8 distractors)
@@ -505,21 +524,74 @@ document.addEventListener('DOMContentLoaded', () => {
         kanjiDetail.style.display = 'none';
     }
     
-    // Track wrong answers
+    // Track wrong answers for spaced repetition
     let wrongKanjiList = [];
+    let reviewQueue = [];
+    let reviewInterval = 3;
+    let reviewCounter = 0;
+    let reviewing = false;
 
     // Handle card click event
     function handleCardClick(event) {
         const selectedIndex = parseInt(event.target.dataset.index);
 
-        // Check if the answer is correct
+        // If this is a review card, handle differently
+        if (currentKanji && currentKanji._isReview) {
+            if (selectedIndex === correctOption) {
+                event.target.classList.add('correct-card');
+                // Remove from reviewQueue
+                reviewQueue = reviewQueue.filter(k => k.Kanji !== currentKanji.Kanji);
+                // Show kanji details (review correct, blue)
+                showKanjiDetails(false, "review-correct");
+            } else {
+                // Show as incorrect, but do not increment incorrectCount
+                const option = displayedOptions[selectedIndex];
+                event.target.classList.add('incorrect-card');
+                event.target.innerHTML = `
+                    <span class="wrong-x">✗</span>
+                    <div class="card-kanji">${option.Kanji}</div>
+                    <div class="card-kana">${option.Kana}</div>
+                    <div class="card-english">${option.English}</div>
+                `;
+                // Ensure it's still in reviewQueue
+                if (!reviewQueue.some(k => k.Kanji === currentKanji.Kanji)) {
+                    reviewQueue.push({...currentKanji});
+                }
+                // Show kanji details (review incorrect, red)
+                showKanjiDetails(true, "review-wrong");
+            }
+
+            // No score update for review cards
+
+            // Disable all cards to prevent multiple selections
+            const cards = kanjiGrid.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.removeEventListener('click', handleCardClick);
+                card.style.cursor = 'default';
+            });
+
+            // Show next button and hide mode selectors
+            modeSelector.style.display = 'none';
+            questionModeSection.style.display = 'none';
+            nextButtonContainer.style.display = 'flex';
+
+            // FLIP ANIMATION: trigger flip to show kanji-detail
+            if (kanjiFlipContainer) {
+                kanjiFlipContainer.classList.add('flipped');
+            }
+            // Add margin-bottom to left-panel when flipped
+            if (leftPanel) {
+                leftPanel.classList.add('flipped');
+            }
+            return;
+        }
+
+        // Normal card handling
         if (selectedIndex === correctOption) {
             // Correct answer
             event.target.classList.add('correct-card');
             correctCount++;
             correctCountElement.textContent = correctCount;
-
-            // Show kanji details (correct)
             showKanjiDetails(false);
         } else {
             // Incorrect answer
@@ -541,16 +613,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 correctCard.classList.add('correct-card');
             }
 
-            // Track the wrong kanji
+            // Track the wrong kanji for review and for display at end
             wrongKanjiList.push({
                 Kanji: currentKanji.Kanji,
                 Kana: currentKanji.Kana,
                 English: currentKanji.English
             });
+            // Add to review queue if not already present
+            if (!reviewQueue.some(k => k.Kanji === currentKanji.Kanji)) {
+                reviewQueue.push({...currentKanji});
+            }
             showKanjiDetails(true);
         }
 
-        // Update remaining count
         remainingCount--;
         remainingCountElement.textContent = remainingCount;
 
@@ -605,7 +680,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // Show kanji details when correct or incorrect answer is chosen
-    function showKanjiDetails(isIncorrect = false) {
+    // reviewType: "review-correct" | "review-wrong" | undefined
+    function showKanjiDetails(isIncorrect = false, reviewType = undefined) {
         // No need to hide kanji-display, flip animation will handle it
 
         currentKanjiElement.textContent = currentKanji.Kanji;
@@ -637,7 +713,17 @@ document.addEventListener('DOMContentLoaded', () => {
         // Set color for kanji-card
         const kanjiCard = kanjiDetail.querySelector('.kanji-card');
         if (kanjiCard) {
-            if (isIncorrect) {
+            kanjiCard.classList.remove('review-kanji-card', 'review-wrong-kanji-card');
+            if (reviewType === "review-correct") {
+                kanjiCard.classList.add('review-kanji-card');
+                kanjiCard.classList.remove('incorrect-kanji-card');
+                kanjiCard.classList.remove('correct-kanji-card');
+            } else if (reviewType === "review-wrong") {
+                kanjiCard.classList.add('review-wrong-kanji-card');
+                kanjiCard.classList.remove('review-kanji-card');
+                kanjiCard.classList.remove('correct-kanji-card');
+                kanjiCard.classList.remove('incorrect-kanji-card');
+            } else if (isIncorrect) {
                 kanjiCard.classList.add('incorrect-kanji-card');
                 kanjiCard.classList.remove('correct-kanji-card');
             } else {
